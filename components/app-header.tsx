@@ -20,43 +20,22 @@ export function AppHeader() {
   const [activeTab, setActiveTab] = React.useState("tender-discovery")
 
   return (
-    <header className="fixed top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-      <div className="flex h-16 items-center px-4 md:px-6">
+    <header className="fixed top-0 z-50 w-full border-b bg-white">
+      <div className="flex h-16 items-center px-6">
         {/* Logo */}
-        <div className="flex items-center gap-6 mr-4 md:mr-6">
-          <div className="flex items-center">
-            <svg
-              viewBox="0 0 150 40"
-              className="h-8 w-auto"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              {/* Red triangle/arrow */}
-              <path
-                d="M5 20 L22 4 L22 36 Z"
-                fill="#dc2626"
-              />
-              {/* Blue triangle */}
-              <path
-                d="M28 4 L45 20 L28 36 Z"
-                fill="#2563eb"
-              />
-              {/* JSW Text */}
-              <text
-                x="52"
-                y="28"
-                style={{ fontSize: '24px', fontWeight: 'bold', fill: '#1e293b' }}
-              >
-                JSW
-              </text>
-            </svg>
-          </div>
+        <div className="flex items-center mr-45">
+          <img 
+            src="/logo.png" 
+            alt="JSW Logo" 
+            className="h-10 w-auto"
+          />
         </div>
 
         {/* Navigation Tabs */}
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
-          className="hidden md:flex"
+          className="flex"
         >
           <TabsList variant="default">
             <TabsTrigger value="tender-discovery">
@@ -72,32 +51,24 @@ export function AppHeader() {
         </Tabs>
 
         {/* Right Section */}
-        <div className="flex items-center gap-2 ml-auto">
+        <div className="flex items-center gap-3 ml-auto">
           {/* Search Bar */}
-          <div className="hidden lg:block">
-            <div className="relative w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search..."
-                className="w-full pl-9 bg-muted/50"
-              />
-            </div>
+          <div className="relative w-72">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Input
+              type="search"
+              placeholder="SEARCH"
+              className="w-full pl-9 bg-gray-50 border-gray-200 placeholder:text-gray-500 placeholder:text-xs placeholder:font-medium h-9"
+            />
           </div>
 
-          {/* Separator after search */}
-          <Separator orientation="vertical" className="h-8 hidden lg:block" />
-
-          {/* Mobile Search */}
-          <Button variant="ghost" size="icon" className="lg:hidden">
-            <Search className="h-5 w-5" />
-          </Button>
+          
 
           {/* Notifications */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="relative">
-                <Bell className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="relative h-9 w-9">
+                <Bell className="h-8 w-8 text-gray-600" />
                 <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-600" />
               </Button>
             </DropdownMenuTrigger>
@@ -116,23 +87,24 @@ export function AppHeader() {
           </DropdownMenu>
 
           {/* Separator */}
-          <Separator orientation="vertical" className="h-8" />
+          <div className="w-px h-6 bg-gray-300 mx-1"></div>
+
 
           {/* User Profile */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="flex items-center gap-2 px-2 h-auto py-1.5"
+                className="flex items-center gap-3 px-2 h-auto py-2"
               >
-                <div className="hidden md:flex flex-col items-end">
-                  <span className="text-sm font-medium leading-tight">Ramesh Sahay</span>
-                  <span className="text-[10px] text-muted-foreground uppercase tracking-wide leading-tight">
-                    HEAD OF GOVT/PSU FLAT SALES - CENTRAL
+                <div className="flex flex-col items-end">
+                  <span className="text-sm font-semibold leading-tight text-gray-900">Ramesh Sahay</span>
+                  <span className="text-[10px] text-gray-500 uppercase tracking-wide leading-tight font-medium">
+                    HEAD OF GOV T/PSU FLAT SALES-CENTRAL
                   </span>
                 </div>
-                <Avatar className="h-8 w-8">
-                  <AvatarFallback className="bg-blue-600 text-white text-xs font-semibold">
+                <Avatar className="h-9 w-9">
+                  <AvatarFallback className="bg-indigo-100 text-indigo-600 text-sm font-bold">
                     RS
                   </AvatarFallback>
                 </Avatar>

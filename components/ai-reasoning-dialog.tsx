@@ -8,8 +8,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Brain, ChevronRight, FileDown } from "lucide-react"
+import { ChevronRight, Download } from "lucide-react"
 
 interface ReasoningStep {
   step: number
@@ -38,65 +37,56 @@ export function AIReasoningDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl p-0 border-2 border-blue-500 flex flex-col max-h-[85vh]">
+    <Dialog  open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="!max-w-2xl w-[90vw] p-0 flex flex-col max-h-[85vh]">
         <DialogHeader className="px-6 pt-6 pb-4 shrink-0">
-          <DialogTitle className="flex items-center gap-2 text-xl">
-            <Brain className="h-6 w-6 text-blue-600" />
+          <DialogTitle className="text-xl font-bold text-gray-900">
             AI Reasoning Breakdown
           </DialogTitle>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground pt-1">
-            <span className="font-semibold">
-              Lead Score: <span className="text-blue-600">{leadScore}/100</span>
+          <div className="flex items-center gap-2 text-sm pt-1">
+            <span className="text-gray-600">
+              Lead Score: <span className="font-bold text-blue-600 bg-blue-50 px-1.5">{leadScore}/100</span>
             </span>
-            <span>•</span>
-            <span>{analyzedTime}</span>
+            <span className="text-gray-400">•</span>
+            <span className="text-gray-500">{analyzedTime}</span>
           </div>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 py-4 space-y-3 scrollbar-hide">
+        <div className="flex-1 overflow-y-auto px-6 py-2 space-y-3 scrollbar-hide">
           {reasoningSteps.map((step) => (
             <div
               key={step.step}
-              className="flex gap-3 p-4 rounded-lg border bg-card hover:bg-accent/5 transition-colors group cursor-pointer"
+              className="flex gap-4 p-4 rounded-lg border border-gray-200 bg-white hover:border-gray-300 transition-colors cursor-pointer"
             >
               <div className="shrink-0">
-                <div className="flex items-center justify-center w-6 h-6 rounded-full bg-muted text-sm font-semibold text-muted-foreground">
+                <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-sm font-semibold text-gray-600">
                   {step.step}
                 </div>
               </div>
 
-              <div className="flex-1 space-y-2">
-                <p className="text-sm leading-relaxed text-foreground">
+              <div className="flex-1 space-y-1">
+                <p className="text-sm leading-relaxed text-gray-900">
                   {step.description}
                 </p>
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-muted-foreground">
-                    Confidence:
-                  </span>
-                  <Badge
-                    variant="secondary"
-                    className="text-xs font-semibold bg-blue-50 text-blue-600 hover:bg-blue-100"
-                  >
-                    {step.confidence}%
-                  </Badge>
-                </div>
+                <p className="text-xs text-gray-400">
+                  • Confidence: {step.confidence}%
+                </p>
               </div>
 
-              <ChevronRight className="h-5 w-5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity self-center" />
+              <ChevronRight className="h-5 w-5 text-gray-300 self-center shrink-0" />
             </div>
           ))}
         </div>
 
         <DialogFooter className="gap-2 px-6 py-4 border-t shrink-0">
-          <Button variant="outline" onClick={() => onOpenChange(false)}>
+          <Button variant="ghost" onClick={() => onOpenChange(false)} className="text-gray-700">
             Close
           </Button>
           <Button
             onClick={handleExport}
             className="bg-gray-900 hover:bg-gray-800 text-white"
           >
-            <FileDown className="h-4 w-4 mr-2" />
+            <Download className="h-4 w-4 mr-2" />
             Export Reasoning
           </Button>
         </DialogFooter>

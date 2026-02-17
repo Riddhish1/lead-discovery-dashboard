@@ -16,28 +16,28 @@ export function LeadPropensityCard({
 
   return (
 
-    <div className="bg-gray-50 rounded-xl border shadow-sm p-5 flex items-center justify-between">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 flex items-center justify-between">
 
       {/* LEFT CONTENT */}
       <div>
 
-        <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+        <p className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2 leading-tight">
           Lead Propensity
         </p>
 
         <div className="flex items-baseline gap-2">
 
-          <span className="text-5xl font-bold text-gray-900 leading-none">
+          <span className="text-[52px] font-bold text-gray-900 leading-none">
             {score}
           </span>
 
-          <span className="text-xl text-gray-400">
+          <span className="text-lg text-gray-400 font-medium">
             /100
           </span>
 
         </div>
 
-        <p className="text-blue-600 font-medium mt-2">
+        <p className="text-blue-600 text-[14px] font-semibold mt-1.5">
           {probabilityText}
         </p>
 

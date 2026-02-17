@@ -71,6 +71,7 @@ export function TenderCard(props: TenderCardProps) {
     logistics,
     logisticsDetail,
     sourcePortal,
+    additionalBadge,
     aiAction,
     quote,
     reasoningSteps
@@ -104,73 +105,81 @@ export function TenderCard(props: TenderCardProps) {
 
           <div className="flex-1">
             {/* Header */}
-            <div className="flex gap-3 mb-4">
+            <div className="flex justify-between items-start mb-4">
 
-              <div className="p-2.5 bg-gray-100 rounded-lg border">
-                <FileText className="h-5 w-5 text-gray-500"/>
-              </div>
+              <div className="flex items-start gap-3.5">
 
-              <div>
+  <div className="p-[10px] bg-gray-100 rounded-[10px] border border-gray-200">
+    <FileText className="h-[18px] w-[18px] text-gray-500"/>
+  </div>
 
-                <div className="flex items-center gap-2">
+  <div>
 
-                  <h3 className="font-semibold text-gray-900">
-                    {organization}
-                  </h3>
+    <h3 className="text-[16px] font-bold text-gray-800 leading-[1.3]">
+      {organization}
+    </h3>
 
-                  <Badge variant="outline" className={getStatusColor()}>
-                    {status}
-                  </Badge>
+    <div className="flex items-center gap-1.5 text-[13px] text-gray-500 mt-[4px]">
+      <MapPin className="h-[14px] w-[14px]"/>
+      {location}
+      <span className="mx-1 text-gray-500">•</span>
+      {date}
+    </div>
 
-                </div>
+  </div>
 
-                <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                  <MapPin className="h-4 w-4"/>
-                  {location}
-                  • {date}
-                </div>
+</div>
 
-              </div>
+
+              <Badge variant="outline" className={getStatusColor()}>
+                {status}
+              </Badge>
 
             </div>
 
 
-            <h2 className="text-lg font-semibold mb-4">
+            <h2 className="text-[20px] font-bold text-gray-900 leading-snug mb-4">
               {title}
             </h2>
 
 
             {/* Requirements */}
-            <div className="grid md:grid-cols-2 gap-x-12 gap-y-4 mb-5">
+            <div className="grid md:grid-cols-2 gap-x-16 gap-y-6 mb-6">
 
-              {requirements.map((req, i) => (
+  {requirements.map((req, i) => (
 
-                <div key={i} className="flex gap-2.5">
+    <div key={i} className="flex items-start gap-3">
 
-                  <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5"/>
+      <CheckCircle2 className="h-[18px] w-[18px] text-emerald-600 shrink-0 mt-[2px]" />
 
-                  <div>
+      <div>
 
-                    <p className="text-xs font-semibold text-gray-500 uppercase">
-                      {req.category}
-                    </p>
+        <p className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.08em] leading-none">
+          {req.category}
+        </p>
 
-                    <p className="text-sm text-gray-800">
-                      {req.detail}
-                    </p>
+        <p className="text-[15px] font-medium text-gray-800 leading-[1.35] mt-1">
+          {req.detail}
+        </p>
 
-                  </div>
+      </div>
 
-                </div>
+    </div>
 
-              ))}
+  ))}
 
-            </div>
+</div>
+
+
+            <Separator className="mb-5"/>
           </div>
 
+
+              
           {/* Quote - Positioned at bottom above footer */}
-          <div className="border-l-4 border-blue-500 bg-blue-50 p-3">
-            <p className="text-sm italic text-gray-700">
+          <div className="flex items-start">
+            <div className="w-[5px] h-8 bg-blue-500 rounded mr-3 shrink-0"></div>
+            <p className="text-[16px] italic font-medium text-gray-600 leading-relaxed">
               {quote}
             </p>
           </div>
@@ -179,7 +188,7 @@ export function TenderCard(props: TenderCardProps) {
 
 
         {/* RIGHT SIDEBAR */}
-        <div className="border-l p-5 space-y-4">
+        <div className="border-l bg-gray-50 px-7 py-6 space-y-4">
 
           {/* NEW COMPONENT HERE */}
           <LeadPropensityCard
@@ -192,15 +201,15 @@ export function TenderCard(props: TenderCardProps) {
 
           {/* VALUE */}
           <div>
-            <p className="text-xs text-gray-500 uppercase font-semibold">
+            <p className="text-[11px] text-gray-500 uppercase font-semibold tracking-wider mb-2">
               Total Value
             </p>
 
-            <p className="text-2xl font-bold">
+            <p className="text-[32px] font-bold text-gray-900 leading-none">
               {totalValue}
             </p>
 
-            <p className="text-xs text-gray-500">
+            <p className="text-[13px] text-gray-500 mt-1">
               {valueSource}
             </p>
           </div>
@@ -212,16 +221,16 @@ export function TenderCard(props: TenderCardProps) {
 
             <div>
 
-              <p className="text-xs text-gray-500 uppercase font-semibold flex gap-1">
-                <Calendar className="h-4 w-4"/>
+              <p className="text-[11px] text-gray-400 uppercase font-semibold flex items-center gap-1.5 tracking-wider mb-2">
+                <Calendar className="h-3.5 w-3.5"/>
                 Deadline
               </p>
 
-              <p className="text-sm font-semibold">
+              <p className="text-[15px] font-bold text-gray-900 mb-2">
                 {deadline}
               </p>
 
-              <Badge className={getDaysLeftColor()}>
+              <Badge className={`${getDaysLeftColor()} text-[10px] font-bold px-2 py-1 rounded`}>
                 {daysLeft} DAYS LEFT
               </Badge>
 
@@ -230,16 +239,16 @@ export function TenderCard(props: TenderCardProps) {
 
             <div>
 
-              <p className="text-xs text-gray-500 uppercase font-semibold flex gap-1">
-                <Truck className="h-4 w-4"/>
+              <p className="text-[11px] text-gray-400 uppercase font-semibold flex items-center gap-1.5 tracking-wider mb-2">
+                <Truck className="h-3.5 w-3.5"/>
                 Logistics
               </p>
 
-              <p className="text-sm font-semibold">
+              <p className="text-[15px] font-bold text-gray-900">
                 {logistics}
               </p>
 
-              <p className="text-xs text-gray-500">
+              <p className="text-[13px] text-gray-500 mt-1">
                 {logisticsDetail}
               </p>
 
@@ -250,34 +259,46 @@ export function TenderCard(props: TenderCardProps) {
 
           <Separator/>
 
-          <Badge variant="outline">
-            {sourcePortal}
-          </Badge>
+          <div className="flex gap-2 items-center">
+            <Badge variant="outline" className="text-[12px] font-semibold px-2.5 py-1 border-gray-300 text-gray-700 rounded">
+              {sourcePortal}
+            </Badge>
+            
+            {additionalBadge && (
+              <Badge className="text-[12px] font-semibold px-2.5 py-1 bg-blue-100 text-blue-600 hover:bg-blue-100 rounded">
+                {additionalBadge}
+              </Badge>
+            )}
+          </div>
 
         </div>
 
 
         {/* FOOTER */}
-        <div className="col-span-1 lg:col-span-2 border-t p-3 flex justify-between items-center">
+        <div className="col-span-1 lg:col-span-2 border-t bg-gray-50 px-5 py-4 flex justify-between items-center">
 
-          <div className="flex gap-2">
+          <div className="flex gap-3 items-center">
 
-            <Button className="bg-blue-600 text-white">
+            <Button className="bg-blue-600 hover:bg-blue-700 text-white text-[14px] font-medium h-10 px-4 rounded-lg">
               <MessageSquare className="h-4 w-4 mr-2"/>
               Ask JSW AI
             </Button>
 
-            <Button variant="ghost">
+            <div className="w-px h-6 bg-gray-200 mx-1"></div>
+
+
+
+            <Button variant="ghost" className="text-[14px] text-gray-700 h-10 px-3">
               <Plus className="h-4 w-4 mr-2"/>
               Add to Salesforce
             </Button>
 
-            <Button variant="ghost">
+            <Button variant="ghost" className="text-[14px] text-gray-700 h-10 px-3">
               <FileDown className="h-4 w-4 mr-2"/>
               Docs
             </Button>
 
-            <Button variant="ghost">
+            <Button variant="ghost" className="text-[14px] text-gray-700 h-10 px-3">
               <Info className="h-4 w-4 mr-2"/>
               Details
             </Button>
@@ -287,7 +308,7 @@ export function TenderCard(props: TenderCardProps) {
 
           <Button 
             variant="outline" 
-            className="text-blue-600"
+            className="text-blue-600 text-[14px] font-medium h-10 px-4 rounded-lg border-blue-200"
             onClick={() => setDialogOpen(true)}
           >
             <Sparkles className="h-4 w-4 mr-2"/>

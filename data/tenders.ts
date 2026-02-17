@@ -64,12 +64,12 @@ export const tenders: TenderData[] = [
     totalValue: "₹5.5 Cr",
     valueSource: "Inferred from EMD 3%",
     deadline: "02 March, 2026",
-    daysLeft: 13,
+    daysLeft: 20,
     logistics: "1200 km",
     logisticsDetail: "Rail+Truck",
     sourcePortal: "MP Tenders Portal",
     quote: "Product & PSU fit is strong, logistics manageable.",
-    aiAction: "AI Decision Logic"
+    aiAction: "AI Reasoning"
   },
   {
     organization: "National Highways Authority of India",
@@ -143,7 +143,7 @@ export const tenders: TenderData[] = [
     logistics: "980 km",
     logisticsDetail: "Rail",
     sourcePortal: "BHEL Procurement",
-    quote: "Moderate risk. Non-standard specification requires special tooling investment. Consider if strategic relationship is priority.",
+    quote: "Moderate risk. Non-standard specification requires special tooling investment.",
     aiAction: "AI Reasoning"
   },
   {
@@ -181,7 +181,7 @@ export const tenders: TenderData[] = [
     logisticsDetail: "Rail",
     sourcePortal: "IREPS",
     additionalBadge: "BOQ Available",
-    quote: "Strong win probability. Railway projects align with JSW strategic focus and we have proven track record with Eastern Railway.",
+    quote: "Strong win probability. Railway projects align with JSW strategic focus.",
     aiAction: "AI Reasoning"
   }
 ]
