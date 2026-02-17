@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -17,18 +16,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
-
-interface FilterOption {
-  id: string
-  label: string
-  checked: boolean
-}
-
-interface FilterSection {
-  id: string
-  title: string
-  options: FilterOption[]
-}
+import type { FilterSection } from "@/data/filters"
 
 interface FiltersSidebarProps {
   filters: FilterSection[]
