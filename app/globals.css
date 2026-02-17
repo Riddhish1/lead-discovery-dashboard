@@ -124,3 +124,19 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Position sidebar below the header */
+[data-slot="sidebar-container"] {
+  top: 4rem !important;
+  height: calc(100vh - 4rem) !important;
+}
+
+/* Hide scrollbar but keep scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;             /* Chrome, Safari */
+}
