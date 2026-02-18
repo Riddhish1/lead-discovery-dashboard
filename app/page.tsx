@@ -66,7 +66,7 @@ function DashboardContent() {
         onCheckboxChange={handleCheckboxChange}
         onClearAll={clearAllFilters}
       />
-      <SidebarInset className="flex-1 overflow-auto">
+      <SidebarInset className="flex-1 overflow-auto" style={{ backgroundColor: '#F8FAFC80' }}>
         <ActiveFilters
           filters={activeFilters}
           onToggleSidebar={toggleSidebar}
