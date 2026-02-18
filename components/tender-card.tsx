@@ -88,7 +88,7 @@ export function TenderCard(props: TenderCardProps) {
 
   const getStatusColor = () => {
     if (status === "Open Bidding")
-      return "bg-green-50 text-green-700 border-green-200"
+      return "bg-[#ECFDF5] text-[#007A55] border-[#A4F4CF] font-bold px-3 py-1.5"
 
     return "bg-gray-50 text-gray-700 border-gray-200"
   }
@@ -115,11 +115,11 @@ export function TenderCard(props: TenderCardProps) {
 
   <div>
 
-    <h3 className="text-[16px] font-bold text-gray-800 leading-[1.3]">
+    <h3 className="text-[16px] font-bold text-[#1D293D] leading-[1.3]">
       {organization}
     </h3>
 
-    <div className="flex items-center gap-1.5 text-[13px] text-gray-500 mt-[4px]">
+    <div className="flex items-center gap-1.5 text-[13px] text-[#62748E] mt-[4px]">
       <MapPin className="h-[14px] w-[14px]"/>
       {location}
       <span className="mx-1 text-gray-500">•</span>
@@ -138,7 +138,7 @@ export function TenderCard(props: TenderCardProps) {
             </div>
 
 
-            <h2 className="text-[20px] font-bold text-gray-900 leading-snug mb-4">
+            <h2 className="text-[20px] font-bold text-[#0F172B] leading-snug mb-4 ml-1.5">
               {title}
             </h2>
 
@@ -154,11 +154,11 @@ export function TenderCard(props: TenderCardProps) {
 
       <div>
 
-        <p className="text-[12px] font-bold text-gray-400 uppercase tracking-[0.08em] leading-none">
+        <p className="text-[12px] font-bold text-[#90A1B9] uppercase tracking-[0.08em] leading-none">
           {req.category}
         </p>
 
-        <p className="text-[15px] font-medium text-gray-800 leading-[1.35] mt-1">
+        <p className="text-[15px] font-medium text-[#314158] leading-[1.35] mt-1 line-height: 19.3">
           {req.detail}
         </p>
 
@@ -179,7 +179,7 @@ export function TenderCard(props: TenderCardProps) {
           {/* Quote - Positioned at bottom above footer */}
           <div className="flex items-start">
             <div className="w-[5px] h-8 bg-blue-500 rounded mr-3 shrink-0"></div>
-            <p className="text-[16px] italic font-medium text-gray-600 leading-relaxed">
+            <p className="text-[16px] italic font-medium text-[#45556C] leading-relaxed">
               {quote}
             </p>
           </div>
@@ -201,15 +201,15 @@ export function TenderCard(props: TenderCardProps) {
 
           {/* VALUE */}
           <div>
-            <p className="text-[11px] text-gray-500 uppercase font-semibold tracking-wider mb-2">
+            <p className="text-[13px] text-[#90A1B9] uppercase font-bold tracking-wider mb-2">
               Total Value
             </p>
 
-            <p className="text-[32px] font-bold text-gray-900 leading-none">
+            <p className="text-[28px] font-bold text-gray-900 leading-none">
               {totalValue}
             </p>
 
-            <p className="text-[13px] text-gray-500 mt-1">
+            <p className="text-[14px] text-[#90A1B9] mt-1">
               {valueSource}
             </p>
           </div>
@@ -221,7 +221,7 @@ export function TenderCard(props: TenderCardProps) {
 
             <div>
 
-              <p className="text-[11px] text-gray-400 uppercase font-semibold flex items-center gap-1.5 tracking-wider mb-2">
+              <p className="text-[11px] text-[#90A1B9] uppercase font-bold flex items-center gap-1.5 tracking-wider mb-2">
                 <Calendar className="h-3.5 w-3.5"/>
                 Deadline
               </p>
@@ -230,7 +230,7 @@ export function TenderCard(props: TenderCardProps) {
                 {deadline}
               </p>
 
-              <Badge className={`${getDaysLeftColor()} text-[10px] font-bold px-2 py-1 rounded`}>
+              <Badge className={`${getDaysLeftColor()} text-[10px] text-[#45556C] bg-[#E2E8F0] border-[#CAD5E2] font-bold px-2 py-1 rounded`}>
                 {daysLeft} DAYS LEFT
               </Badge>
 
@@ -239,7 +239,7 @@ export function TenderCard(props: TenderCardProps) {
 
             <div>
 
-              <p className="text-[11px] text-gray-400 uppercase font-semibold flex items-center gap-1.5 tracking-wider mb-2">
+              <p className="text-[11px] text-[#90A1B9] uppercase font-bold flex items-center gap-1.5 tracking-wider mb-2">
                 <Truck className="h-3.5 w-3.5"/>
                 Logistics
               </p>
@@ -248,7 +248,7 @@ export function TenderCard(props: TenderCardProps) {
                 {logistics}
               </p>
 
-              <p className="text-[13px] text-gray-500 mt-1">
+              <p className="text-[13px] text-[#62748E] mt-1">
                 {logisticsDetail}
               </p>
 
