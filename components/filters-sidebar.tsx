@@ -30,7 +30,7 @@ export function FiltersSidebar({ filters, onCheckboxChange, onClearAll }: Filter
   }
 
   return (
-    <Sidebar collapsible="offcanvas" className="border-r">
+    <Sidebar collapsible="offcanvas" className="border-r bg-white">
       <SidebarHeader className="border-b px-4 py-3 shrink-0">
         <h2 className="text-lg font-bold">Filters</h2>
       </SidebarHeader>

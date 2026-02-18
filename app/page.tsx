@@ -71,7 +71,7 @@ function DashboardContent() {
           filters={activeFilters}
           onToggleSidebar={toggleSidebar}
         />
-        <div className="p-4 md:p-6 space-y-6">
+        <div className="pt-6 px-8 pb-0 space-y-7">
           {/* Tender Cards */}
           {tenders.map((tender, index) => (
             <TenderCard
