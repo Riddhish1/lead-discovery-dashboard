@@ -4,7 +4,7 @@ export interface TenderRequirement {
 }
 
 export interface TenderData {
-  organization: string
+  awardingAuthority: string
   location: string
   date: string
   status: string
@@ -17,17 +17,18 @@ export interface TenderData {
   valueSource: string
   deadline: string
   daysLeft: number
-  logistics: string
+  nearestSupply: string
   logisticsDetail: string
   sourcePortal: string
   additionalBadge?: string
   quote: string
   aiAction: string
+  contractValue: number
 }
 
 export const tenders: TenderData[] = [
   {
-    organization: "M.P. Power Generating Co. Ltd. (MPPGCL)",
+    awardingAuthority: "M.P. Power Generating Co. Ltd. (MPPGCL)",
     location: "Jabalpur, M.P.",
     date: "09 Feb 2026",
     status: "Open Bidding",
@@ -35,19 +36,19 @@ export const tenders: TenderData[] = [
     title: "Supply of Chequered Plates, Corten Plates & Stainless Steel Plates required for various Thermal Power Stations of MPPGCL",
     requirements: [
       {
-        category: "PRODUCT ELIGIBILITY CHECKED",
+        category: "STEEL REQUIREMENT CONFIRMED",
         detail: "IS3502 chequered plates required"
       },
       {
-        category: "SPECIFICATION COMPLIANCE CHECKED",
+        category: "JSW PRODUCT MATCH CHECKED",
         detail: "Corten & HR plates match JSW grades"
       },
       {
-        category: "PLANT CAPABILITY CHECKED",
+        category: "QUANTITY THRESHOLD CHECKED",
         detail: "Vijayanagar produces ≥10 mm chequered"
       },
       {
-        category: "COMMERCIAL ELIGIBILITY CHECKED",
+        category: "CUSTOMER CRM STATUS CHECKED",
         detail: "No PQR exclusions for JSW"
       },
       {
@@ -55,7 +56,7 @@ export const tenders: TenderData[] = [
         detail: "Rail + truck 1200 km route"
       },
       {
-        category: "TIMELINE FEASIBILITY CHECKED",
+        category: "DELIVERY TIMELINE CHECKED",
         detail: "90-day delivery achievable"
       }
     ],
@@ -65,14 +66,15 @@ export const tenders: TenderData[] = [
     valueSource: "Inferred from EMD 3%",
     deadline: "02 March, 2026",
     daysLeft: 20,
-    logistics: "1200 km",
+    nearestSupply: "1200 km",
     logisticsDetail: "Rail+Truck",
     sourcePortal: "MP Tenders Portal",
     quote: "Product & PSU fit is strong, logistics manageable.",
-    aiAction: "AI Reasoning"
+    aiAction: "AI Decision Logic",
+    contractValue: 55000000
   },
   {
-    organization: "National Highways Authority of India",
+    awardingAuthority: "National Highways Authority of India",
     location: "Kolkata, West Bengal",
     date: "Feb 15, 2026",
     status: "Pre-Bid Meeting",
@@ -102,15 +104,16 @@ export const tenders: TenderData[] = [
     valueSource: "calculated from BOQ",
     deadline: "Feb 25, 2026",
     daysLeft: 5,
-    logistics: "8 km",
+    nearestSupply: "8 km",
     logisticsDetail: "Truck",
     sourcePortal: "NHAI Portal",
     additionalBadge: "Full BOQ",
     quote: "Excellent win probability. We have existing relationship from Phase 1 and superior logistics position.",
-    aiAction: "AI Reasoning"
+    aiAction: "AI Reasoning",
+    contractValue: 28000000
   },
   {
-    organization: "Bharat Heavy Electricals Limited",
+    awardingAuthority: "Bharat Heavy Electricals Limited",
     location: "Ranipet, Tamil Nadu",
     date: "Feb 10, 2026",
     status: "Technical Evaluation",
@@ -140,14 +143,15 @@ export const tenders: TenderData[] = [
     valueSource: "stated in tender",
     deadline: "Mar 28, 2026",
     daysLeft: 39,
-    logistics: "980 km",
+    nearestSupply: "980 km",
     logisticsDetail: "Rail",
     sourcePortal: "BHEL Procurement",
     quote: "Moderate risk. Non-standard specification requires special tooling investment.",
-    aiAction: "AI Reasoning"
+    aiAction: "AI Reasoning",
+    contractValue: 6000000
   },
   {
-    organization: "Indian Railways - Eastern Railway",
+    awardingAuthority: "Indian Railways - Eastern Railway",
     location: "Patna, Bihar",
     date: "Feb 14, 2026",
     status: "Open Bidding",
@@ -177,11 +181,12 @@ export const tenders: TenderData[] = [
     valueSource: "from detailed BOQ",
     deadline: "Mar 05, 2026",
     daysLeft: 16,
-    logistics: "650 km",
+    nearestSupply: "650 km",
     logisticsDetail: "Rail",
     sourcePortal: "IREPS",
     additionalBadge: "BOQ Available",
     quote: "Strong win probability. Railway projects align with JSW strategic focus.",
-    aiAction: "AI Reasoning"
+    aiAction: "AI Reasoning",
+    contractValue: 42000000
   }
 ]
