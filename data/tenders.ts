@@ -153,6 +153,120 @@ export const privateNewsTenders: PrivateNewsData[] = [
   },
 ]
 
+export const tenderWinsTenders: TenderData[] = [
+  {
+    awardingAuthority: "Larsen & Toubro Ltd. — Heavy Civil",
+    location: "Pune, Maharashtra",
+    date: "Jan 28, 2026",
+    status: "Awarded",
+    title: "Structural steel supply for Pune Metro Phase 3 elevated corridor — 18 km viaduct",
+    requirements: [
+      { category: "STEEL REQUIREMENT CONFIRMED", detail: "Fe550D TMT bars & structural sections confirmed in BOQ" },
+      { category: "JSW PRODUCT MATCH CHECKED", detail: "All grades available at Dolvi — IS1786 compliant" },
+      { category: "QUANTITY THRESHOLD CHECKED", detail: "24,000 MT awarded — above JSW strategic threshold" },
+      { category: "CUSTOMER CRM STATUS CHECKED", detail: "L&T Key Account — existing payment terms honored" },
+      { category: "LOGISTICS FEASIBILITY CHECKED", detail: "Dolvi to Pune — 160 km, dedicated truck fleet" },
+      { category: "DELIVERY TIMELINE CHECKED", detail: "Phased delivery schedule agreed — 18 months" },
+    ],
+    leadScore: 96,
+    leadProbability: "Won",
+    totalValue: "₹16.8 Cr",
+    valueSource: "Final awarded contract value",
+    deadline: "Mar 2027",
+    daysLeft: 402,
+    nearestSupply: "160 km",
+    logisticsDetail: "Truck · Dolvi",
+    sourcePortal: "L&T Procurement Portal",
+    additionalBadge: "Full BOQ",
+    quote: "Largest single metro steel award this quarter. ",
+    aiAction: "AI Decision Logic",
+    contractValue: 168000000,
+  },
+  {
+    awardingAuthority: "Tata Projects Ltd.",
+    location: "Surat, Gujarat",
+    date: "Feb 03, 2026",
+    status: "Awarded",
+    title: "HR coils and galvanized sheets for Surat Diamond Bourse Phase 2 expansion",
+    requirements: [
+      { category: "STEEL REQUIREMENT CONFIRMED", detail: "HR coils 2–6mm & GI sheets 0.5mm confirmed" },
+      { category: "JSW PRODUCT MATCH CHECKED", detail: "Vijayanagar HR grades exact match to spec" },
+      { category: "QUANTITY THRESHOLD CHECKED", detail: "9,500 MT — qualifies for Key Account pricing" },
+      { category: "CUSTOMER CRM STATUS CHECKED", detail: "Tata Projects — Tier 1 approved vendor, no disputes" },
+      { category: "LOGISTICS FEASIBILITY CHECKED", detail: "Vijayanagar to Surat — 650 km via Vadodara rail" },
+      { category: "DELIVERY TIMELINE CHECKED", detail: "Quarterly delivery over 9 months" },
+    ],
+    leadScore: 91,
+    leadProbability: "Won",
+    totalValue: "₹7.2 Cr",
+    valueSource: "Contract value confirmed",
+    deadline: "Nov 2026",
+    daysLeft: 280,
+    nearestSupply: "650 km",
+    logisticsDetail: "Rail · Vijayanagar",
+    sourcePortal: "Tata Projects Vendor Portal",
+    quote: "High-value real estate to industrial conversion project. Tata Projects requested JSW as preferred supplier based on Phase 1 quality.",
+    aiAction: "AI Decision Logic",
+    contractValue: 72000000,
+  },
+  {
+    awardingAuthority: "ONGC Ltd. — Projects Division",
+    location: "Kakinada, Andhra Pradesh",
+    date: "Jan 15, 2026",
+    status: "Awarded",
+    title: "API grade line pipes and structural steel for KG Basin offshore platform upgrades",
+    requirements: [
+      { category: "STEEL REQUIREMENT CONFIRMED", detail: "API 5L X65 line pipe & offshore structural plate" },
+      { category: "JSW PRODUCT MATCH CHECKED", detail: "JSW Plate Mill certified for API 5L X65 grade" },
+      { category: "QUANTITY THRESHOLD CHECKED", detail: "6,200 MT — niche high-margin offshore grade" },
+      { category: "CUSTOMER CRM STATUS CHECKED", detail: "ONGC pre-approved vendor list — JSW certified since 2021" },
+      { category: "LOGISTICS FEASIBILITY CHECKED", detail: "Vijayanagar to Kakinada port — 380 km, road" },
+      { category: "DELIVERY TIMELINE CHECKED", detail: "Delivery by Apr 2026 — critical path item" },
+    ],
+    leadScore: 88,
+    leadProbability: "Won",
+    totalValue: "₹11.4 Cr",
+    valueSource: "BOQ-based calculation",
+    deadline: "Apr 2026",
+    daysLeft: 60,
+    nearestSupply: "380 km",
+    logisticsDetail: "Road · Vijayanagar",
+    sourcePortal: "ONGC GeM Portal",
+    additionalBadge: "API Certified",
+    quote: "Offshore API grade is a high-margin, low-competition segment secured this deal over SAIL.",
+    aiAction: "AI Decision Logic",
+    contractValue: 114000000,
+  },
+  {
+    awardingAuthority: "Shapoorji Pallonji & Co. Ltd.",
+    location: "Mumbai, Maharashtra",
+    date: "Feb 10, 2026",
+    status: "Awarded",
+    title: "TMT rebars and structural sections for Navi Mumbai International Airport terminal building",
+    requirements: [
+      { category: "STEEL REQUIREMENT CONFIRMED", detail: "Fe500D TMT rebars & parallel flange columns confirmed" },
+      { category: "JSW PRODUCT MATCH CHECKED", detail: "Dolvi TMT & structural sections — Fe500D IS1786 match" },
+      { category: "QUANTITY THRESHOLD CHECKED", detail: "31,000 MT — largest single airport order this FY" },
+      { category: "CUSTOMER CRM STATUS CHECKED", detail: "SP Group — active Key Account, no credit issues" },
+      { category: "LOGISTICS FEASIBILITY CHECKED", detail: "Dolvi to NMIA site — 45 km, shortest supply route" },
+      { category: "DELIVERY TIMELINE CHECKED", detail: "24-month phased schedule — 8 delivery milestones" },
+    ],
+    leadScore: 94,
+    leadProbability: "Won",
+    totalValue: "₹22.3 Cr",
+    valueSource: "Signed PO value",
+    deadline: "Feb 2028",
+    daysLeft: 740,
+    nearestSupply: "45 km",
+    logisticsDetail: "Truck · Dolvi",
+    sourcePortal: "SP Procurement",
+    additionalBadge: "Strategic Account",
+    quote: "Flagship infrastructure win. Proximity of Dolvi plant to NMIA gave JSW an unbeatable logistics and cost advantage.",
+    aiAction: "AI Decision Logic",
+    contractValue: 223000000,
+  },
+]
+
 export const tenders: TenderData[] = [
   {
     awardingAuthority: "M.P. Power Generating Co. Ltd. (MPPGCL)",
@@ -163,19 +277,19 @@ export const tenders: TenderData[] = [
     title: "Supply of Chequered Plates, Corten Plates & Stainless Steel Plates required for various Thermal Power Stations of MPPGCL",
     requirements: [
       {
-        category: "STEEL REQUIREMENT CONFIRMED",
+        category: "PRODUCT ELIGIBILITY CHECKED",
         detail: "IS3502 chequered plates required"
       },
       {
-        category: "JSW PRODUCT MATCH CHECKED",
+        category: "SPECIFICATION COMPLIANCE CHECKED",
         detail: "Corten & HR plates match JSW grades"
       },
       {
-        category: "QUANTITY THRESHOLD CHECKED",
+        category: "PLANT CAPABILITY CHECKED",
         detail: "Vijayanagar produces ≥10 mm chequered"
       },
       {
-        category: "CUSTOMER CRM STATUS CHECKED",
+        category: "COMMERCIAL ELIGIBILITY CHECKED",
         detail: "No PQR exclusions for JSW"
       },
       {
@@ -183,7 +297,7 @@ export const tenders: TenderData[] = [
         detail: "Rail + truck 1200 km route"
       },
       {
-        category: "DELIVERY TIMELINE CHECKED",
+        category: "TIMELINE FEASIBILITY CHECKED",
         detail: "90-day delivery achievable"
       }
     ],
@@ -235,7 +349,7 @@ export const tenders: TenderData[] = [
     logisticsDetail: "Truck",
     sourcePortal: "NHAI Portal",
     additionalBadge: "Full BOQ",
-    quote: "Excellent win probability. We have existing relationship from Phase 1 and superior logistics position.",
+    quote: "Excellent win probability. We have existing relationship from Phase 1 .",
     aiAction: "AI Reasoning",
     contractValue: 28000000
   },
@@ -273,7 +387,7 @@ export const tenders: TenderData[] = [
     nearestSupply: "980 km",
     logisticsDetail: "Rail",
     sourcePortal: "BHEL Procurement",
-    quote: "Moderate risk. Non-standard specification requires special tooling investment.",
+    quote: "Moderate risk. Non-standard specification.",
     aiAction: "AI Reasoning",
     contractValue: 6000000
   },

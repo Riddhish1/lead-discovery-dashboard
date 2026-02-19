@@ -35,19 +35,26 @@ export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
         </div>
 
         {/* Navigation Tabs */}
-        <Tabs
-          value={activeTab}
-          onValueChange={onTabChange}
-          className="flex"
-        >
-          <TabsList variant="default">
-            <TabsTrigger value="tender-discovery">
+        <Tabs value={activeTab} onValueChange={onTabChange} className="flex">
+          <TabsList className="bg-[#F1F5F9] rounded-full p-1 ml-6 shadow-sm" variant="default">
+            <TabsTrigger
+              value="tender-discovery"
+              className="text-sm font-semibold px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE]"
+            >
               Tender Discovery
             </TabsTrigger>
-            <TabsTrigger value="tender-wins">
+
+            <TabsTrigger
+              value="tender-wins"
+              className="text-sm font-semibold px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE]"
+            >
               Tender Wins
             </TabsTrigger>
-            <TabsTrigger value="private-news">
+
+            <TabsTrigger
+              value="private-news"
+              className="text-sm font-semibold px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE]"
+            >
               Private News
             </TabsTrigger>
           </TabsList>

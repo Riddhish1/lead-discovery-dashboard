@@ -24,6 +24,7 @@ import {
 import { LeadPropensityCard } from './lead-propensity-card';
 import { AIReasoningDialog } from './ai-reasoning-dialog';
 import { PrivateNewsRightPanel } from './private-news-right-panel';
+import { TenderDiscoveryRightPanel } from './tender-discovery-right-panel';
 import { getDefaultReasoningSteps, type ReasoningStep } from '@/data/reasoning-steps';
 
 
@@ -249,6 +250,19 @@ export function TenderCard(props: TenderCardProps) {
             aiAction={aiAction}
             onAIClick={() => setDialogOpen(true)}
           />
+        ) : cardVariant === "tender-discovery" ? (
+          <TenderDiscoveryRightPanel
+            leadScore={leadScore}
+            leadProbability={leadProbability}
+            totalValue={totalValue}
+            valueSource={valueSource}
+            deadline={deadline}
+            daysLeft={daysLeft}
+            nearestSupply={nearestSupply}
+            logisticsDetail={logisticsDetail}
+            sourcePortal={sourcePortal}
+            additionalBadge={additionalBadge}
+          />
         ) : (
         <div className="border-l bg-gray-50 px-7 py-6 space-y-4">
 
@@ -257,9 +271,6 @@ export function TenderCard(props: TenderCardProps) {
             score={leadScore}
             probabilityText={leadProbability}
           />
-
-
-
 
           {/* VALUE */}
           <div>
@@ -287,8 +298,6 @@ export function TenderCard(props: TenderCardProps) {
             </p>
           </div>
 
-
-
           {/* DEADLINE */}
           <div className="grid grid-cols-2 gap-4">
 
@@ -296,7 +305,7 @@ export function TenderCard(props: TenderCardProps) {
 
               <p className="text-[11px] text-[#90A1B9] uppercase font-bold flex items-center gap-1.5 tracking-wider mb-2">
                 <Calendar className="h-3.5 w-3.5" />
-                Deadline
+                Est. Steel Delivery Start
               </p>
 
               <p className="text-[15px] font-bold text-gray-900 mb-2">
@@ -333,7 +342,7 @@ export function TenderCard(props: TenderCardProps) {
 
               <p className="text-[11px] text-[#90A1B9] uppercase font-bold flex items-center gap-1.5 tracking-wider mb-2">
                 <Truck className="h-3.5 w-3.5" />
-                NEAREST SUPPLY
+                Nearest Supply
               </p>
 
               <p className="text-[15px] font-bold text-gray-900">

@@ -7,7 +7,7 @@ import { AppHeader } from "@/components/app-header"
 import { ActiveFilters } from "@/components/active-filters"
 import { TenderCard } from "@/components/tender-card"
 import { initialFilters, tenderWinsFilters, privateNewsFilters, type FilterSection } from "@/data/filters"
-import { tenders, privateNewsTenders } from "@/data/tenders"
+import { tenders, tenderWinsTenders, privateNewsTenders } from "@/data/tenders"
 
 function getFiltersForTab(tab: string): FilterSection[] {
   if (tab === "tender-wins") return tenderWinsFilters
@@ -120,13 +120,19 @@ function DashboardContent({ activeTab }: { activeTab: string }) {
                   sourceArticleUrl={item.sourceArticleUrl}
                 />
               ))
+            : activeTab === "tender-wins"
+            ? tenderWinsTenders.map((tender, index) => (
+                <TenderCard
+                  key={index}
+                  {...tender}
+                  cardVariant="tender-wins"
+                />
+              ))
             : tenders.map((tender, index) => (
                 <TenderCard
                   key={index}
                   {...tender}
-                  cardVariant={
-                    activeTab === "tender-wins" ? "tender-wins" : "tender-discovery"
-                  }
+                  cardVariant="tender-discovery"
                 />
               ))
           }
