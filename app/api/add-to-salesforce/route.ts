@@ -115,19 +115,24 @@ Your job is to extract structured, verifiable business facts from authoritative 
 
 STRICT BEHAVIOR RULES:
 1. Write in concise, factual, corporate language. No storytelling.
-2. Each field must be max 255 characters (Salesforce limit).
+2. Format EVERY field as line-by-line "Label: Value" pairs, one per line. Example:
+   GST: 19AAATN1963H1ZF
+   CIN: U45200MH1990PLC123456
+   PAN: AAATN1963H
+   Incorp: 1990
+   HQ: Bandra Kurla Complex, Mumbai
 3. Prioritize Indian official sources: MCA filings, GST portal, company website, annual reports, BSE/NSE, credit rating reports.
-4. No assumptions. No invented data.
-5. If unsure → use "" (empty string, never guess).
+4. No assumptions. No invented data. If a specific sub-field is unavailable, write "N/A".
+5. NEVER leave a field empty. Always provide at least 3 sub-fields per section even if partial.
 
 Return output ONLY as strict JSON following this schema:
 {
-  "Business_Identity_Legal_Verification__c": "CIN, GST registration status, incorporation date, registered address. Max 255 chars.",
-  "Ownership_Leadership_Structure__c": "Key shareholders, promoters, board members, ownership structure. Max 255 chars.",
-  "Customer_Credit_Profile__c": "Credit rating (CRISIL/ICRA/CARE), payment history indicators, financial health. Max 255 chars.",
-  "Market_Position__c": "Market share, competitive ranking, key strengths, strategic positioning. Max 255 chars.",
-  "Key_Contacts_Influence_Map__c": "Key decision makers with roles: CEO, CFO, VP Procurement, Purchase Head. Max 255 chars.",
-  "Opportunity_Intelligence_Profile__c": "Recent projects, expansion plans, procurement patterns, steel usage history. Max 255 chars."
+  "Business_Identity_Legal_Verification__c": "CIN: ...\nGST: ...\nPAN: ...\nIncorp Date: ...\nReg Address: ...\nEntity Type: ...",
+  "Ownership_Leadership_Structure__c": "Ownership: ...\nChairman: ...\nMD/CEO: ...\nPromoters: ...\nBoard: ...",
+  "Customer_Credit_Profile__c": "Rating Agency: ...\nRating: ...\nOutlook: ...\nDebt Coverage: ...\nGearing: ...\nPayment History: ...",
+  "Market_Position__c": "Sector: ...\nCapacity/Scale: ...\nMarket Share: ...\nCompetitors: ...\nStrength: ...",
+  "Key_Contacts_Influence_Map__c": "CMD/Chairman: ...\nMD: ...\nDir (Commercial): ...\nDir (Finance): ...\nProcurement Head: ...\nDecision Channel: ...",
+  "Opportunity_Intelligence_Profile__c": "Capex Plan: ...\nProject: ...\nProcurement: ...\nSteel Requirement: ...\nTimeline: ..."
 }`;
 
   const userPrompt = `Research this company for a steel sales opportunity:
@@ -137,16 +142,15 @@ ${tenderTitle ? `PROJECT CONTEXT: ${tenderTitle}` : ""}
 ${location ? `LOCATION: ${location}` : ""}
 
 Search for:
-1. "${companyName}" MCA registration CIN GST
-2. "${companyName}" directors shareholders ownership
-3. "${companyName}" credit rating CRISIL ICRA CARE
-4. "${companyName}" market position industry ranking
-5. "${companyName}" key contacts procurement head VP
-6. "${companyName}" recent projects infrastructure steel procurement
+1. "${companyName}" MCA registration CIN GST PAN incorporation date registered address
+2. "${companyName}" directors board members shareholders ownership promoters chairperson MD CEO
+3. "${companyName}" credit rating CRISIL ICRA CARE BRICKWORK financial health NPA debt gearing payment
+4. "${companyName}" market position capacity industry ranking competitors strengths
+5. "${companyName}" procurement head VP commercial purchase director contact decision maker
+6. "${companyName}" capex expansion plan steel procurement requirement project tender pipeline
 
-Extract information matching the JSON schema. Ensure each field is max 255 characters.
-If company cannot be found or verified, return empty strings for all fields.
-
+IMPORTANT: Use line-by-line Label: Value format for every field (e.g. "GST: ..."). 
+NEVER return empty string for any field — use "N/A" for unknown sub-values.
 Return strict JSON only.`;
 
   try {
@@ -213,9 +217,9 @@ Return strict JSON only.`;
 }
 
 /**
- * Truncate string to Salesforce field limit
+ * Truncate string to Salesforce Long Text Area field limit
  */
-function truncate(str: string | undefined, maxLength = 255): string {
+function truncate(str: string | undefined, maxLength = 2000): string {
   if (!str) return "";
   return str.length > maxLength ? str.substring(0, maxLength - 3) + "..." : str;
 }
