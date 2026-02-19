@@ -31,7 +31,7 @@ export function TenderDiscoveryRightPanel({
   additionalBadge,
 }: TenderDiscoveryRightPanelProps) {
   return (
-    <div className="border-l bg-gray-50 px-7 py-6 space-y-4">
+    <div className="border-l bg-gray-50 px-7 py-6 space-y-4 h-full">
 
       <LeadPropensityCard
         score={leadScore}
@@ -99,11 +99,13 @@ export function TenderDiscoveryRightPanel({
 
       <Separator />
 
-      <div className="flex gap-2 items-center">
-        <Badge variant="outline" className="text-[12px] font-semibold px-2.5 py-1 border-gray-300 text-gray-700 rounded">
-          {sourcePortal}
-        </Badge>
-        {additionalBadge && (
+      <div className="flex gap-2 items-center flex-wrap">
+        {sourcePortal && (
+          <Badge variant="outline" className="text-[12px] font-semibold px-2.5 py-1 border-gray-300 text-gray-700 rounded">
+            {sourcePortal}
+          </Badge>
+        )}
+        {additionalBadge && additionalBadge !== sourcePortal && (
           <Badge className="text-[12px] font-semibold px-2.5 py-1 bg-blue-100 text-blue-600 hover:bg-blue-100 rounded">
             {additionalBadge}
           </Badge>

@@ -51,7 +51,7 @@ interface TenderCardProps {
   daysLeft: number
   nearestSupply: string
   logisticsDetail: string
-  sourcePortal: string
+  sourcePortal?: string
   additionalBadge?: string
   quote: string
   aiAction: string
@@ -127,7 +127,7 @@ export function TenderCard(props: TenderCardProps) {
     daysLeft,
     nearestSupply,
     logisticsDetail,
-    sourcePortal,
+    sourcePortal = "",
     additionalBadge,
     aiAction,
     quote,
@@ -174,7 +174,7 @@ export function TenderCard(props: TenderCardProps) {
 
     <Card className="border p-0 overflow-hidden">
 
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px]">
 
         {/* LEFT */}
         <div className="p-5 flex flex-col min-h-full">
@@ -303,56 +303,56 @@ export function TenderCard(props: TenderCardProps) {
             additionalBadge={additionalBadge}
           />
         ) : (
-        <div className="border-l bg-gray-50 px-7 py-6 space-y-4">
+          <div className="border-l bg-gray-50 px-7 py-6 space-y-4">
 
-          {/* NEW COMPONENT HERE */}
-          <LeadPropensityCard
-            score={leadScore}
-            probabilityText={leadProbability}
-          />
+            {/* NEW COMPONENT HERE */}
+            <LeadPropensityCard
+              score={leadScore}
+              probabilityText={leadProbability}
+            />
 
-          {/* VALUE */}
-          <div>
-            <p className="text-[13px] text-[#90A1B9] uppercase font-bold tracking-wider mb-2">
-              Estimated Steel Value
-            </p>
-
-            <p className="text-[28px] font-bold text-gray-900 leading-none">
-              {totalValue}
-            </p>
-
-            <p className="text-[14px] text-[#90A1B9] mt-1">
-              {valueSource}
-            </p>
-          </div>
-
-          {/* CONTRACT VALUE */}
-          <div>
-            <p className="text-[13px] text-[#90A1B9] uppercase font-bold tracking-wider mb-2">
-              Contract Value
-            </p>
-
-            <p className="text-[28px] font-bold text-gray-900 leading-none">
-              ₹{(contractValue / 10000000).toFixed(1)} Cr
-            </p>
-          </div>
-
-          {/* DEADLINE */}
-          <div className="grid grid-cols-2 gap-4">
-
+            {/* VALUE */}
             <div>
-
-              <p className="text-[11px] text-[#90A1B9] uppercase font-bold flex items-center gap-1.5 tracking-wider mb-2">
-                <Calendar className="h-3.5 w-3.5" />
-                Est. Steel Delivery Start
+              <p className="text-[13px] text-[#90A1B9] uppercase font-bold tracking-wider mb-2">
+                Estimated Steel Value
               </p>
 
-              <p className="text-[15px] font-bold text-gray-900 mb-2">
-                {deadline}
+              <p className="text-[28px] font-bold text-gray-900 leading-none">
+                {totalValue}
               </p>
 
-              <Badge
-  className={`
+              <p className="text-[14px] text-[#90A1B9] mt-1">
+                {valueSource}
+              </p>
+            </div>
+
+            {/* CONTRACT VALUE */}
+            <div>
+              <p className="text-[13px] text-[#90A1B9] uppercase font-bold tracking-wider mb-2">
+                Contract Value
+              </p>
+
+              <p className="text-[28px] font-bold text-gray-900 leading-none">
+                ₹{(contractValue / 10000000).toFixed(1)} Cr
+              </p>
+            </div>
+
+            {/* DEADLINE */}
+            <div className="grid grid-cols-2 gap-4">
+
+              <div>
+
+                <p className="text-[11px] text-[#90A1B9] uppercase font-bold flex items-center gap-1.5 tracking-wider mb-2">
+                  <Calendar className="h-3.5 w-3.5" />
+                  Est. Steel Delivery Start
+                </p>
+
+                <p className="text-[15px] font-bold text-gray-900 mb-2">
+                  {deadline}
+                </p>
+
+                <Badge
+                  className={`
     h-[22.5px]
     px-[9px]
     rounded-[4px]
@@ -369,58 +369,58 @@ export function TenderCard(props: TenderCardProps) {
 
     flex items-center justify-center
   `}
->
-  {daysLeft} DAYS LEFT
-</Badge>
+                >
+                  {daysLeft} DAYS LEFT
+                </Badge>
 
 
-            </div>
+              </div>
 
 
-            <div>
+              <div>
 
-              <p className="text-[11px] text-[#90A1B9] uppercase font-bold flex items-center gap-1.5 tracking-wider mb-2">
-                <Truck className="h-3.5 w-3.5" />
-                Nearest Supply
-              </p>
+                <p className="text-[11px] text-[#90A1B9] uppercase font-bold flex items-center gap-1.5 tracking-wider mb-2">
+                  <Truck className="h-3.5 w-3.5" />
+                  Nearest Supply
+                </p>
 
-              <p className="text-[15px] font-bold text-gray-900">
-                {nearestSupply}
-              </p>
+                <p className="text-[15px] font-bold text-gray-900">
+                  {nearestSupply}
+                </p>
 
-              <p
-  className="
+                <p
+                  className="
     text-[12px]
     leading-[16px]
     font-medium
     text-[#62748E]
     mt-2
   "
->
-  {logisticsDetail}
-</p>
+                >
+                  {logisticsDetail}
+                </p>
 
+
+              </div>
 
             </div>
 
-          </div>
 
+            <Separator />
 
-          <Separator />
-
-          <div className="flex gap-2 items-center">
-            <Badge variant="outline" className="text-[12px] font-semibold px-2.5 py-1 border-gray-300 text-gray-700 rounded">
-              {sourcePortal}
-            </Badge>
-
-            {additionalBadge && (
-              <Badge className="text-[12px] font-semibold px-2.5 py-1 bg-blue-100 text-blue-600 hover:bg-blue-100 rounded">
-                {additionalBadge}
+            <div className="flex gap-2 items-center">
+              <Badge variant="outline" className="text-[12px] font-semibold px-2.5 py-1 border-gray-300 text-gray-700 rounded">
+                {sourcePortal}
               </Badge>
-            )}
-          </div>
 
-        </div>
+              {additionalBadge && (
+                <Badge className="text-[12px] font-semibold px-2.5 py-1 bg-blue-100 text-blue-600 hover:bg-blue-100 rounded">
+                  {additionalBadge}
+                </Badge>
+              )}
+            </div>
+
+          </div>
         )}
 
 
@@ -469,11 +469,11 @@ export function TenderCard(props: TenderCardProps) {
     rounded-[10px]
     flex items-center justify-center
     transition-colors
-    ${salesforceStatus === "success" 
-      ? "text-emerald-600 bg-emerald-50" 
-      : salesforceStatus === "error"
-      ? "text-red-600 bg-red-50"
-      : "text-[#45556C]"}
+    ${salesforceStatus === "success"
+                  ? "text-emerald-600 bg-emerald-50"
+                  : salesforceStatus === "error"
+                    ? "text-red-600 bg-red-50"
+                    : "text-[#45556C]"}
   `}
             >
               {salesforceStatus === "loading" ? (
@@ -485,13 +485,13 @@ export function TenderCard(props: TenderCardProps) {
               )}
 
               <span className="whitespace-nowrap font-semibold">
-                {salesforceStatus === "loading" 
-                  ? "Adding..." 
-                  : salesforceStatus === "success" 
-                  ? "Added!" 
-                  : salesforceStatus === "error"
-                  ? "Failed"
-                  : "Add to Salesforce"}
+                {salesforceStatus === "loading"
+                  ? "Adding..."
+                  : salesforceStatus === "success"
+                    ? "Added!"
+                    : salesforceStatus === "error"
+                      ? "Failed"
+                      : "Add to Salesforce"}
               </span>
             </Button>
 
@@ -549,10 +549,10 @@ export function TenderCard(props: TenderCardProps) {
 
 
 
-<Button
-  variant="outline"
-  onClick={() => setDialogOpen(true)}
-  className="
+          <Button
+            variant="outline"
+            onClick={() => setDialogOpen(true)}
+            className="
     h-[38px]
     px-[16px]
     gap-[8px]
@@ -570,14 +570,14 @@ export function TenderCard(props: TenderCardProps) {
 
     flex items-center justify-center
   "
->
-  <Sparkles
-    className="w-[16px] h-[16px] text-[#1447E6]"
-    strokeWidth={1.5}
-  />
+          >
+            <Sparkles
+              className="w-[16px] h-[16px] text-[#1447E6]"
+              strokeWidth={1.5}
+            />
 
-  <span
-  className="
+            <span
+              className="
     text-[14px]
     leading-[20px]
     font-bold
@@ -586,11 +586,11 @@ export function TenderCard(props: TenderCardProps) {
     whitespace-nowrap
     text-center
   "
->
-  {aiAction}
-</span>
+            >
+              {aiAction}
+            </span>
 
-</Button>
+          </Button>
 
 
         </div>

@@ -119,7 +119,7 @@ export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
                 <div className="flex flex-col items-end">
                   <span className="text-sm font-semibold leading-tight text-gray-900">Ramesh Sahay</span>
                   <span className="text-[10px] text-gray-500 uppercase tracking-wide leading-tight font-medium">
-                    HEAD OF GOV T/PSU FLAT SALES-CENTRAL
+                    HEAD OF GOV/PSU-FLAT SALES-CENTRAL
                   </span>
                 </div>
                 <Avatar className="h-9 w-9">

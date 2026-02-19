@@ -14,9 +14,10 @@ interface ActiveFilter {
 interface ActiveFiltersProps {
   filters: ActiveFilter[]
   onToggleSidebar: () => void
+  activeTab?: string
 }
 
-export function ActiveFilters({ filters, onToggleSidebar }: ActiveFiltersProps) {
+export function ActiveFilters({ filters, onToggleSidebar, activeTab }: ActiveFiltersProps) {
   const visibleFilters = filters.slice(0, 3)
   const remainingCount = filters.length - 3
 
@@ -62,9 +63,14 @@ export function ActiveFilters({ filters, onToggleSidebar }: ActiveFiltersProps) 
         )}
       </div>
 
-      <button className="text-sm text-indigo-600 hover:text-indigo-700 font-medium underline">
-        Download list of sources
-      </button>
+      {(activeTab === "tender-discovery" || activeTab === "tender-wins") && (
+        <button 
+          onClick={() => window.open("https://docs.google.com/document/d/1RlIb7cC-zKjZCNwxGnWkLCeblCUYVjBqz_R5-sdwIRk/edit?tab=t.0#heading=h.fwwo60srqxkh", "_blank")}
+          className="text-sm text-indigo-600 hover:text-indigo-700 font-medium underline"
+        >
+          Download list of sources
+        </button>
+      )}
     </div>
   )
 }
