@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { Bell, Search } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Bell, Search, LogOut } from "lucide-react"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -15,6 +16,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { logout, getUserEmail } from "@/lib/auth"
 
 interface AppHeaderProps {
   activeTab: string
@@ -22,6 +24,13 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
+  const router = useRouter()
+  const userEmail = getUserEmail()
+
+  const handleLogout = () => {
+    logout()
+    router.push("/login")
+  }
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-white">
       <div className="flex h-16 items-center px-6">
@@ -123,11 +132,18 @@ export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem disabled className="text-xs text-muted-foreground">
+                {userEmail || "ramesh.sahay@jsw.in"}
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Team</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Log out</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
+                <LogOut className="mr-2 h-4 w-4" />
+                Log out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
