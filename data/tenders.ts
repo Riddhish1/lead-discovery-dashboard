@@ -4,7 +4,7 @@ export interface TenderRequirement {
 }
 
 export interface TenderData {
-  awardingAuthority: string
+  winningCompany: string
   location: string
   date: string
   status: string
@@ -28,7 +28,7 @@ export interface TenderData {
 
 export interface PrivateNewsData {
   // Card identity
-  awardingAuthority: string        // Company / Developer name
+  winningCompany: string        // Company / Developer name
   location: string
   title: string
   requirements: TenderRequirement[]
@@ -52,7 +52,7 @@ export interface PrivateNewsData {
 
 export const privateNewsTenders: PrivateNewsData[] = [
   {
-    awardingAuthority: "Adani Ports & SEZ Ltd.",
+    winningCompany: "Adani Ports & SEZ Ltd.",
     location: "Mundra, Gujarat",
     title: "Adani Ports announces ₹4,200 Cr expansion of Mundra terminal — structural steel demand expected Q3 2026",
     requirements: [
@@ -77,7 +77,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     priority: "High",
   },
   {
-    awardingAuthority: "Prestige Estates Projects Ltd.",
+    winningCompany: "Prestige Estates Projects Ltd.",
     location: "Bengaluru, Karnataka",
     title: "Prestige Group launches 3.2 mn sq ft mixed-use development in Whitefield — steel procurement likely mid-2026",
     requirements: [
@@ -102,7 +102,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     priority: "High",
   },
   {
-    awardingAuthority: "NTPC Renewable Energy Ltd.",
+    winningCompany: "NTPC Renewable Energy Ltd.",
     location: "Rajkot, Gujarat",
     title: "NTPC REL awards 900 MW solar + storage project in Rajkot — module mounting structure procurement imminent",
     requirements: [
@@ -127,7 +127,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     priority: "Medium",
   },
   {
-    awardingAuthority: "GMR Airports Infrastructure Ltd.",
+    winningCompany: "GMR Airports Infrastructure Ltd.",
     location: "Hyderabad, Telangana",
     title: "GMR Hyderabad Airport Terminal 3 construction begins — structural steel demand of ~22,000 MT anticipated",
     requirements: [
@@ -155,7 +155,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
 
 export const tenderWinsTenders: TenderData[] = [
   {
-    awardingAuthority: "Larsen & Toubro Ltd. — Heavy Civil",
+    winningCompany: "Larsen & Toubro Ltd. — Heavy Civil",
     location: "Pune, Maharashtra",
     date: "Jan 28, 2026",
     status: "Awarded",
@@ -183,7 +183,7 @@ export const tenderWinsTenders: TenderData[] = [
     contractValue: 168000000,
   },
   {
-    awardingAuthority: "Tata Projects Ltd.",
+    winningCompany: "Tata Projects Ltd.",
     location: "Surat, Gujarat",
     date: "Feb 03, 2026",
     status: "Awarded",
@@ -210,7 +210,7 @@ export const tenderWinsTenders: TenderData[] = [
     contractValue: 72000000,
   },
   {
-    awardingAuthority: "ONGC Ltd. — Projects Division",
+    winningCompany: "ONGC Ltd. — Projects Division",
     location: "Kakinada, Andhra Pradesh",
     date: "Jan 15, 2026",
     status: "Awarded",
@@ -238,7 +238,7 @@ export const tenderWinsTenders: TenderData[] = [
     contractValue: 114000000,
   },
   {
-    awardingAuthority: "Shapoorji Pallonji & Co. Ltd.",
+    winningCompany: "Shapoorji Pallonji & Co. Ltd.",
     location: "Mumbai, Maharashtra",
     date: "Feb 10, 2026",
     status: "Awarded",
@@ -269,7 +269,7 @@ export const tenderWinsTenders: TenderData[] = [
 
 export const tenders: TenderData[] = [
   {
-    awardingAuthority: "M.P. Power Generating Co. Ltd. (MPPGCL)",
+    winningCompany: "M.P. Power Generating Co. Ltd. (MPPGCL)",
     location: "Jabalpur, M.P.",
     date: "09 Feb 2026",
     status: "Open Bidding",
@@ -315,7 +315,7 @@ export const tenders: TenderData[] = [
     contractValue: 55000000
   },
   {
-    awardingAuthority: "National Highways Authority of India",
+    winningCompany: "National Highways Authority of India",
     location: "Kolkata, West Bengal",
     date: "Feb 15, 2026",
     status: "Pre-Bid Meeting",
@@ -354,7 +354,7 @@ export const tenders: TenderData[] = [
     contractValue: 28000000
   },
   {
-    awardingAuthority: "Bharat Heavy Electricals Limited",
+    winningCompany: "Bharat Heavy Electricals Limited",
     location: "Ranipet, Tamil Nadu",
     date: "Feb 10, 2026",
     status: "Technical Evaluation",
@@ -392,7 +392,7 @@ export const tenders: TenderData[] = [
     contractValue: 6000000
   },
   {
-    awardingAuthority: "Indian Railways - Eastern Railway",
+    winningCompany: "Indian Railways - Eastern Railway",
     location: "Patna, Bihar",
     date: "Feb 14, 2026",
     status: "Open Bidding",

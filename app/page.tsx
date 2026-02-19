@@ -89,7 +89,7 @@ function DashboardContent({ activeTab }: { activeTab: string }) {
                   key={index}
                   cardVariant="private-news"
                   // required base props with sensible defaults
-                  awardingAuthority={item.awardingAuthority}
+                  winningCompany={item.winningCompany}
                   location={item.location}
                   date=""
                   status=""

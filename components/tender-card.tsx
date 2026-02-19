@@ -18,7 +18,9 @@ import {
   Sparkles,
   Truck,
   MessageSquareText,
-  Download
+  Download,
+  Loader2,
+  Check
 } from "lucide-react"
 
 import { LeadPropensityCard } from './lead-propensity-card';
@@ -35,7 +37,7 @@ interface TenderRequirement {
 
 interface TenderCardProps {
   cardVariant?: "tender-discovery" | "tender-wins" | "private-news"
-  awardingAuthority: string
+  winningCompany: string
   location: string
   date?: string
   status: string
@@ -71,10 +73,47 @@ interface TenderCardProps {
 
 export function TenderCard(props: TenderCardProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
+  const [salesforceStatus, setSalesforceStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle")
+
+  const handleAddToSalesforce = async () => {
+    if (salesforceStatus === "loading" || salesforceStatus === "success") return
+
+    setSalesforceStatus("loading")
+
+    try {
+      const response = await fetch("/api/add-to-salesforce", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          companyName: props.winningCompany,
+          tenderTitle: props.title,
+          location: props.location,
+          module: props.cardVariant || "tender-discovery",
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        setSalesforceStatus("success")
+        console.log("✅ Added to Salesforce:", data.recordId)
+        // Reset after 3 seconds
+        setTimeout(() => setSalesforceStatus("idle"), 3000)
+      } else {
+        console.error("❌ Salesforce error:", data.error)
+        setSalesforceStatus("error")
+        setTimeout(() => setSalesforceStatus("idle"), 3000)
+      }
+    } catch (error) {
+      console.error("❌ Network error:", error)
+      setSalesforceStatus("error")
+      setTimeout(() => setSalesforceStatus("idle"), 3000)
+    }
+  }
 
   const {
     cardVariant = "tender-discovery",
-    awardingAuthority,
+    winningCompany,
     location,
     date,
     status,
@@ -153,7 +192,7 @@ export function TenderCard(props: TenderCardProps) {
                 <div>
 
                   <h3 className="text-[16px] font-bold text-[#1D293D] leading-[1.3]">
-                    {awardingAuthority}
+                    {winningCompany}
                   </h3>
 
                   <div className="flex items-center gap-1.5 text-[13px] text-[#62748E] mt-[4px]">
@@ -418,22 +457,41 @@ export function TenderCard(props: TenderCardProps) {
 
             <Button
               variant="ghost"
-              className="
+              onClick={handleAddToSalesforce}
+              disabled={salesforceStatus === "loading"}
+              className={`
     text-[14px]
     leading-[20px]
     font-semibold
-    text-[#45556C]
     h-[36px]
     px-[12px]
     gap-[8px]
     rounded-[10px]
     flex items-center justify-center
-  "
+    transition-colors
+    ${salesforceStatus === "success" 
+      ? "text-emerald-600 bg-emerald-50" 
+      : salesforceStatus === "error"
+      ? "text-red-600 bg-red-50"
+      : "text-[#45556C]"}
+  `}
             >
-              <Plus className="w-[16px] h-[16px] text-[#90A1B9]" strokeWidth={2} />
+              {salesforceStatus === "loading" ? (
+                <Loader2 className="w-4 h-4 animate-spin text-[#90A1B9]" />
+              ) : salesforceStatus === "success" ? (
+                <Check className="w-4 h-4 text-emerald-600" strokeWidth={2} />
+              ) : (
+                <Plus className="w-[16px] h-[16px] text-[#90A1B9]" strokeWidth={2} />
+              )}
 
               <span className="whitespace-nowrap font-semibold">
-                Add to Salesforce
+                {salesforceStatus === "loading" 
+                  ? "Adding..." 
+                  : salesforceStatus === "success" 
+                  ? "Added!" 
+                  : salesforceStatus === "error"
+                  ? "Failed"
+                  : "Add to Salesforce"}
               </span>
             </Button>
 
