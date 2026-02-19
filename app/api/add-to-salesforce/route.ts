@@ -265,6 +265,7 @@ async function createSalesforceRecord(
 
     // Step 2: Create record
     const sfPayload = {
+      Name: companyName,
       companyName__c: companyName,
       Business_Identity_Legal_Verification__c: enrichment.Business_Identity_Legal_Verification__c,
       Ownership_Leadership_Structure__c: enrichment.Ownership_Leadership_Structure__c,
