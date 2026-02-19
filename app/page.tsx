@@ -6,12 +6,23 @@ import { FiltersSidebar } from "@/components/filters-sidebar"
 import { AppHeader } from "@/components/app-header"
 import { ActiveFilters } from "@/components/active-filters"
 import { TenderCard } from "@/components/tender-card"
-import { initialFilters, type FilterSection } from "@/data/filters"
+import { initialFilters, tenderWinsFilters, privateNewsFilters, type FilterSection } from "@/data/filters"
 import { tenders } from "@/data/tenders"
 
-function DashboardContent() {
+function getFiltersForTab(tab: string): FilterSection[] {
+  if (tab === "tender-wins") return tenderWinsFilters
+  if (tab === "private-news") return privateNewsFilters
+  return initialFilters
+}
+
+function DashboardContent({ activeTab }: { activeTab: string }) {
   const { toggleSidebar } = useSidebar()
-  const [filters, setFilters] = React.useState<FilterSection[]>(initialFilters)
+  const [filters, setFilters] = React.useState<FilterSection[]>(() => getFiltersForTab(activeTab))
+
+  // Reset filters when tab changes
+  React.useEffect(() => {
+    setFilters(getFiltersForTab(activeTab))
+  }, [activeTab])
 
   const handleCheckboxChange = (
     sectionId: string,
@@ -86,12 +97,14 @@ function DashboardContent() {
 }
 
 export default function Home() {
+  const [activeTab, setActiveTab] = React.useState("tender-discovery")
+
   return (
     <div className="h-screen w-full overflow-hidden flex flex-col">
-      <AppHeader />
+      <AppHeader activeTab={activeTab} onTabChange={setActiveTab} />
       <div className="flex-1 overflow-hidden">
         <SidebarProvider className="h-full">
-          <DashboardContent />
+          <DashboardContent activeTab={activeTab} />
         </SidebarProvider>
       </div>
     </div>

@@ -16,9 +16,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-export function AppHeader() {
-  const [activeTab, setActiveTab] = React.useState("tender-discovery")
+interface AppHeaderProps {
+  activeTab: string
+  onTabChange: (tab: string) => void
+}
 
+export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-white">
       <div className="flex h-16 items-center px-6">
@@ -34,7 +37,7 @@ export function AppHeader() {
         {/* Navigation Tabs */}
         <Tabs
           value={activeTab}
-          onValueChange={setActiveTab}
+          onValueChange={onTabChange}
           className="flex"
         >
           <TabsList variant="default">
