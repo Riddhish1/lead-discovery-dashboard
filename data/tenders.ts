@@ -26,6 +26,133 @@ export interface TenderData {
   contractValue: number
 }
 
+export interface PrivateNewsData {
+  // Card identity
+  awardingAuthority: string        // Company / Developer name
+  location: string
+  title: string
+  requirements: TenderRequirement[]
+  quote: string
+  aiAction: string
+  // Lead score
+  leadScore: number
+  leadProbability: string
+  // Private News right panel
+  estSteelValue: string
+  steelValueConfidence: string
+  steelStart: string
+  steelStartRelative: string
+  nearestPlant: string
+  plantDistance: string
+  sourceName: string
+  publishedDate: string
+  sourceArticleUrl?: string
+  priority: "High" | "Medium" | "Low"
+}
+
+export const privateNewsTenders: PrivateNewsData[] = [
+  {
+    awardingAuthority: "Adani Ports & SEZ Ltd.",
+    location: "Mundra, Gujarat",
+    title: "Adani Ports announces ₹4,200 Cr expansion of Mundra terminal — structural steel demand expected Q3 2026",
+    requirements: [
+      { category: "PROJECT TYPE", detail: "Port terminal expansion — berths, warehouses & rail infrastructure" },
+      { category: "STEEL SIGNAL", detail: "Structural steel, HR plates & TMT bars for 3 new berths" },
+      { category: "JSW PRODUCT FIT", detail: "HR Coils & Structural sections — strong grade match" },
+      { category: "COMPETITION RISK", detail: "Low — JSW supplied Phase 1 Mundra expansion in 2023" },
+    ],
+    quote: "Early-stage signal — Adani has historically moved fast from outreach within 2 weeks.",
+    aiAction: "AI Decision Logic",
+    leadScore: 88,
+    leadProbability: "High Probability",
+    estSteelValue: "₹9.4 Cr",
+    steelValueConfidence: "High confidence · AI estimated from project scope",
+    steelStart: "Aug 2026",
+    steelStartRelative: "In 6 months",
+    nearestPlant: "Dolvi Plant",
+    plantDistance: "310 km · Rail route",
+    sourceName: "Economic Times",
+    publishedDate: "Feb 18, 2026",
+    sourceArticleUrl: "https://economictimes.indiatimes.com",
+    priority: "High",
+  },
+  {
+    awardingAuthority: "Prestige Estates Projects Ltd.",
+    location: "Bengaluru, Karnataka",
+    title: "Prestige Group launches 3.2 mn sq ft mixed-use development in Whitefield — steel procurement likely mid-2026",
+    requirements: [
+      { category: "PROJECT TYPE", detail: "Mixed-use real estate — towers, retail podium & parking" },
+      { category: "STEEL SIGNAL", detail: "TMT 500D bars & structural columns for 42-storey towers" },
+      { category: "JSW PRODUCT FIT", detail: "TMT rebars — JSW is preferred supplier for Prestige" },
+      { category: "QUANTITY ESTIMATE", detail: "~18,000 MT total across 3 towers" },
+    ],
+    quote: "Prestige has an active JSW account coordinate with the KAM team immediately.",
+    aiAction: "AI Decision Logic",
+    leadScore: 76,
+    leadProbability: "Moderate-High Probability",
+    estSteelValue: "₹12.6 Cr",
+    steelValueConfidence: "Medium confidence · estimated from floor-area ratio",
+    steelStart: "Jun 2026",
+    steelStartRelative: "In 4 months",
+    nearestPlant: "Vijayanagar Plant",
+    plantDistance: "340 km · Truck",
+    sourceName: "Business Standard",
+    publishedDate: "Feb 17, 2026",
+    sourceArticleUrl: "https://business-standard.com",
+    priority: "High",
+  },
+  {
+    awardingAuthority: "NTPC Renewable Energy Ltd.",
+    location: "Rajkot, Gujarat",
+    title: "NTPC REL awards 900 MW solar + storage project in Rajkot — module mounting structure procurement imminent",
+    requirements: [
+      { category: "PROJECT TYPE", detail: "Utility-scale solar park — module mounting & cable trays" },
+      { category: "STEEL SIGNAL", detail: "Galvanized purlins, C-channels & hot-dip galvanized sections" },
+      { category: "JSW PRODUCT FIT", detail: "Structural sections match — NTPC pre-approved vendor" },
+      { category: "COMPETITION RISK", detail: "Medium — Tata Structura also qualified" },
+    ],
+    quote: "Renewable infra is a fast-moving segment 30 days of award news.",
+    aiAction: "AI Decision Logic",
+    leadScore: 65,
+    leadProbability: "Moderate Probability",
+    estSteelValue: "₹6.8 Cr",
+    steelValueConfidence: "Medium confidence · based on MW / MT benchmark",
+    steelStart: "May 2026",
+    steelStartRelative: "In 3 months",
+    nearestPlant: "Vasind Plant",
+    plantDistance: "560 km · Rail + Truck",
+    sourceName: "PV Tech India",
+    publishedDate: "Feb 16, 2026",
+    sourceArticleUrl: "https://pvtech.org",
+    priority: "Medium",
+  },
+  {
+    awardingAuthority: "GMR Airports Infrastructure Ltd.",
+    location: "Hyderabad, Telangana",
+    title: "GMR Hyderabad Airport Terminal 3 construction begins — structural steel demand of ~22,000 MT anticipated",
+    requirements: [
+      { category: "PROJECT TYPE", detail: "Airport terminal expansion — steel roof trusses & facades" },
+      { category: "STEEL SIGNAL", detail: "Heavy structural sections, HR plates & weathering steel" },
+      { category: "JSW PRODUCT FIT", detail: "Parallel flange columns & beams — ideal grade match" },
+      { category: "DELIVERY TIMELINE", detail: "Phased delivery over 18 months from Q3 2026" },
+    ],
+    quote: "Airport steel is a high-visibility, high-value segment news confirms procurement is active.",
+    aiAction: "AI Decision Logic",
+    leadScore: 82,
+    leadProbability: "High Probability",
+    estSteelValue: "₹15.4 Cr",
+    steelValueConfidence: "High confidence · architect drawings referenced in news",
+    steelStart: "Sep 2026",
+    steelStartRelative: "In 7 months",
+    nearestPlant: "Vijayanagar Plant",
+    plantDistance: "415 km · Rail",
+    sourceName: "The Hindu BusinessLine",
+    publishedDate: "Feb 15, 2026",
+    sourceArticleUrl: "https://thehindubusinessline.com",
+    priority: "Medium",
+  },
+]
+
 export const tenders: TenderData[] = [
   {
     awardingAuthority: "M.P. Power Generating Co. Ltd. (MPPGCL)",

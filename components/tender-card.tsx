@@ -23,6 +23,7 @@ import {
 
 import { LeadPropensityCard } from './lead-propensity-card';
 import { AIReasoningDialog } from './ai-reasoning-dialog';
+import { PrivateNewsRightPanel } from './private-news-right-panel';
 import { getDefaultReasoningSteps, type ReasoningStep } from '@/data/reasoning-steps';
 
 
@@ -32,9 +33,10 @@ interface TenderRequirement {
 }
 
 interface TenderCardProps {
+  cardVariant?: "tender-discovery" | "tender-wins" | "private-news"
   awardingAuthority: string
   location: string
-  date: string
+  date?: string
   status: string
   title: string
   requirements: TenderRequirement[]
@@ -52,6 +54,17 @@ interface TenderCardProps {
   aiAction: string
   contractValue: number
   reasoningSteps?: ReasoningStep[]
+  // Private News specific
+  estSteelValue?: string
+  steelValueConfidence?: string
+  steelStart?: string
+  steelStartRelative?: string
+  nearestPlant?: string
+  plantDistance?: string
+  sourceName?: string
+  publishedDate?: string
+  sourceArticleUrl?: string
+  priority?: "High" | "Medium" | "Low"
 }
 
 
@@ -59,6 +72,7 @@ export function TenderCard(props: TenderCardProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
 
   const {
+    cardVariant = "tender-discovery",
     awardingAuthority,
     location,
     date,
@@ -78,8 +92,20 @@ export function TenderCard(props: TenderCardProps) {
     aiAction,
     quote,
     contractValue,
-    reasoningSteps
+    reasoningSteps,
+    estSteelValue = "—",
+    steelValueConfidence = "",
+    steelStart = "—",
+    steelStartRelative = "",
+    nearestPlant = "—",
+    plantDistance = "",
+    sourceName = "",
+    publishedDate = "",
+    sourceArticleUrl,
+    priority,
   } = props
+
+  const isPrivateNews = cardVariant === "private-news"
 
   const steps = reasoningSteps || getDefaultReasoningSteps(leadScore)
 
@@ -97,6 +123,12 @@ export function TenderCard(props: TenderCardProps) {
     return "bg-gray-50 text-gray-700 border-gray-200"
   }
 
+
+  const getPriorityColor = () => {
+    if (priority === "High") return "bg-[#FEF2F2] text-[#B91C1C] border-[#FECACA] font-bold px-3 py-1.5"
+    if (priority === "Medium") return "bg-[#FFFBEB] text-[#B45309] border-[#FDE68A] font-bold px-3 py-1.5"
+    return "bg-[#F0FDF4] text-[#15803D] border-[#BBF7D0] font-bold px-3 py-1.5"
+  }
 
   return (
 
@@ -126,18 +158,27 @@ export function TenderCard(props: TenderCardProps) {
                   <div className="flex items-center gap-1.5 text-[13px] text-[#62748E] mt-[4px]">
                     <MapPin className="h-[14px] w-[14px]" />
                     {location}
-                    <span className="mx-1 text-gray-500">•</span>
-                    {date}
+                    {!isPrivateNews && date && (
+                      <>
+                        <span className="mx-1 text-gray-500">•</span>
+                        {date}
+                      </>
+                    )}
                   </div>
 
                 </div>
 
               </div>
 
-
-              <Badge variant="outline" className={getStatusColor()}>
-                {status}
-              </Badge>
+              {isPrivateNews ? (
+                <Badge variant="outline" className={getPriorityColor()}>
+                  {priority ? `${priority} Priority` : "High Priority"}
+                </Badge>
+              ) : (
+                <Badge variant="outline" className={getStatusColor()}>
+                  {status}
+                </Badge>
+              )}
 
             </div>
 
@@ -192,6 +233,23 @@ export function TenderCard(props: TenderCardProps) {
 
 
         {/* RIGHT SIDEBAR */}
+        {isPrivateNews ? (
+          <PrivateNewsRightPanel
+            leadScore={leadScore}
+            leadProbability={leadProbability}
+            estSteelValue={estSteelValue}
+            steelValueConfidence={steelValueConfidence}
+            steelStart={steelStart}
+            steelStartRelative={steelStartRelative}
+            nearestPlant={nearestPlant}
+            plantDistance={plantDistance}
+            sourceName={sourceName}
+            publishedDate={publishedDate}
+            sourceArticleUrl={sourceArticleUrl}
+            aiAction={aiAction}
+            onAIClick={() => setDialogOpen(true)}
+          />
+        ) : (
         <div className="border-l bg-gray-50 px-7 py-6 space-y-4">
 
           {/* NEW COMPONENT HERE */}
@@ -315,6 +373,7 @@ export function TenderCard(props: TenderCardProps) {
           </div>
 
         </div>
+        )}
 
 
         {/* FOOTER */}

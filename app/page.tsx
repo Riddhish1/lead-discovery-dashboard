@@ -7,7 +7,7 @@ import { AppHeader } from "@/components/app-header"
 import { ActiveFilters } from "@/components/active-filters"
 import { TenderCard } from "@/components/tender-card"
 import { initialFilters, tenderWinsFilters, privateNewsFilters, type FilterSection } from "@/data/filters"
-import { tenders } from "@/data/tenders"
+import { tenders, privateNewsTenders } from "@/data/tenders"
 
 function getFiltersForTab(tab: string): FilterSection[] {
   if (tab === "tender-wins") return tenderWinsFilters
@@ -83,13 +83,53 @@ function DashboardContent({ activeTab }: { activeTab: string }) {
           onToggleSidebar={toggleSidebar}
         />
         <div className="pt-6 px-8 pb-0 space-y-7">
-          {/* Tender Cards */}
-          {tenders.map((tender, index) => (
-            <TenderCard
-              key={index}
-              {...tender}
-            />
-          ))}
+          {activeTab === "private-news"
+            ? privateNewsTenders.map((item, index) => (
+                <TenderCard
+                  key={index}
+                  cardVariant="private-news"
+                  // required base props with sensible defaults
+                  awardingAuthority={item.awardingAuthority}
+                  location={item.location}
+                  date=""
+                  status=""
+                  title={item.title}
+                  requirements={item.requirements}
+                  leadScore={item.leadScore}
+                  leadProbability={item.leadProbability}
+                  totalValue=""
+                  valueSource=""
+                  deadline=""
+                  daysLeft={0}
+                  nearestSupply=""
+                  logisticsDetail=""
+                  sourcePortal=""
+                  quote={item.quote}
+                  aiAction={item.aiAction}
+                  contractValue={0}
+                  // private news specific props
+                  priority={item.priority}
+                  estSteelValue={item.estSteelValue}
+                  steelValueConfidence={item.steelValueConfidence}
+                  steelStart={item.steelStart}
+                  steelStartRelative={item.steelStartRelative}
+                  nearestPlant={item.nearestPlant}
+                  plantDistance={item.plantDistance}
+                  sourceName={item.sourceName}
+                  publishedDate={item.publishedDate}
+                  sourceArticleUrl={item.sourceArticleUrl}
+                />
+              ))
+            : tenders.map((tender, index) => (
+                <TenderCard
+                  key={index}
+                  {...tender}
+                  cardVariant={
+                    activeTab === "tender-wins" ? "tender-wins" : "tender-discovery"
+                  }
+                />
+              ))
+          }
         </div>
       </SidebarInset>
     </div>
