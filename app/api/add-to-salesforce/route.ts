@@ -63,6 +63,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       recordId: sfResult.recordId,
+      recordUrl: sfResult.recordUrl,
       message: "Lead added to Salesforce successfully",
       enrichment: {
         companyName,
@@ -193,7 +194,21 @@ Return strict JSON only.`;
     const jsonStr = jsonMatch ? (jsonMatch[1] || jsonMatch[0]).trim() : content.trim();
 
     try {
-      const enrichedData = JSON.parse(jsonStr) as EnrichmentData;
+      // Sanitize: replace literal control characters inside JSON string values.
+      // Perplexity returns actual newline chars inside strings when using
+      // line-by-line format, which breaks JSON.parse with "bad control character".
+      const sanitized = jsonStr.replace(
+        /"((?:[^"\\]|\\.)*)"/g,
+        (_match: string, capture: string) => {
+          const cleaned = capture
+            .replace(/\n/g, "\\n")
+            .replace(/\r/g, "\\r")
+            .replace(/\t/g, "\\t");
+          return `"${cleaned}"`;
+        }
+      );
+
+      const enrichedData = JSON.parse(sanitized) as EnrichmentData;
 
       // Truncate fields to 255 chars (Salesforce limit)
       const truncated: EnrichmentData = {
@@ -217,9 +232,9 @@ Return strict JSON only.`;
 }
 
 /**
- * Truncate string to Salesforce Long Text Area field limit
+ * Truncate string to Salesforce Text(255) field limit
  */
-function truncate(str: string | undefined, maxLength = 2000): string {
+function truncate(str: string | undefined, maxLength = 255): string {
   if (!str) return "";
   return str.length > maxLength ? str.substring(0, maxLength - 3) + "..." : str;
 }
@@ -230,6 +245,7 @@ function truncate(str: string | undefined, maxLength = 2000): string {
 interface SalesforceResult {
   success: boolean;
   recordId?: string;
+  recordUrl?: string;
   error?: string;
 }
 
@@ -267,9 +283,29 @@ async function createSalesforceRecord(
 
     const { access_token, instance_url } = await tokenRes.json();
 
+    // Resolve OwnerId — use env var directly if set, otherwise look up by email
+    let ownerId = process.env.SALESFORCE_OWNER_ID || null;
+    if (!ownerId && process.env.SALESFORCE_OWNER_EMAIL) {
+      try {
+        const userQuery = encodeURIComponent(`SELECT Id FROM User WHERE Email = '${process.env.SALESFORCE_OWNER_EMAIL}' AND IsActive = true LIMIT 1`);
+        const userRes = await fetch(
+          `${instance_url}/services/data/v58.0/query?q=${userQuery}`,
+          { headers: { Authorization: `Bearer ${access_token}` } }
+        );
+        if (userRes.ok) {
+          const userData = await userRes.json();
+          ownerId = userData.records?.[0]?.Id || null;
+          if (ownerId) console.log("✅ Resolved OwnerId:", ownerId);
+        }
+      } catch {
+        console.warn("⚠️ Could not resolve OwnerId from email (non-fatal)");
+      }
+    }
+
     // Step 2: Create record
-    const sfPayload = {
+    const sfPayload: Record<string, string | number | undefined> = {
       Name: companyName,
+      ...(ownerId ? { OwnerId: ownerId } : {}),
       companyName__c: companyName,
       Business_Identity_Legal_Verification__c: enrichment.Business_Identity_Legal_Verification__c,
       Ownership_Leadership_Structure__c: enrichment.Ownership_Leadership_Structure__c,
@@ -306,7 +342,26 @@ async function createSalesforceRecord(
     }
 
     const result = await createRes.json();
-    return { success: true, recordId: result.id };
+    const recordId = result.id;
+
+    // Fetch the record immediately after creating it — this sets LastViewedDate
+    // for the integration user session and helps it appear in Recently Viewed
+    try {
+      await fetch(
+        `${instance_url}/services/data/v58.0/sobjects/New_Lead_discovery__c/${recordId}`,
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${access_token}` },
+        }
+      );
+      console.log("✅ Record fetched (LastViewedDate updated):", recordId);
+    } catch {
+      // Non-fatal — record was still created successfully
+      console.warn("⚠️ Could not fetch record after create (non-fatal)");
+    }
+
+    const recordUrl = `${instanceUrl}/lightning/r/New_Lead_discovery__c/${recordId}/view`;
+    return { success: true, recordId, recordUrl };
 
   } catch (error) {
     console.error("❌ Salesforce error:", error);

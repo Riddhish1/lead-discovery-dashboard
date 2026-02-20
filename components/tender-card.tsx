@@ -74,6 +74,7 @@ interface TenderCardProps {
 export function TenderCard(props: TenderCardProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [salesforceStatus, setSalesforceStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle")
+  const [salesforceRecordUrl, setSalesforceRecordUrl] = React.useState<string | null>(null)
 
   const handleAddToSalesforce = async () => {
     if (salesforceStatus === "loading" || salesforceStatus === "success") return
@@ -96,9 +97,13 @@ export function TenderCard(props: TenderCardProps) {
 
       if (response.ok && data.success) {
         setSalesforceStatus("success")
-        console.log("✅ Added to Salesforce:", data.recordId)
-        // Reset after 3 seconds
-        setTimeout(() => setSalesforceStatus("idle"), 3000)
+        setSalesforceRecordUrl(data.recordUrl || null)
+        console.log("✅ Added to Salesforce:", data.recordId, data.recordUrl)
+        // Reset after 8 seconds
+        setTimeout(() => {
+          setSalesforceStatus("idle")
+          setSalesforceRecordUrl(null)
+        }, 8000)
       } else {
         console.error("❌ Salesforce error:", data.error)
         setSalesforceStatus("error")
@@ -457,7 +462,13 @@ export function TenderCard(props: TenderCardProps) {
 
             <Button
               variant="ghost"
-              onClick={handleAddToSalesforce}
+              onClick={() => {
+                if (salesforceStatus === "success" && salesforceRecordUrl) {
+                  window.open(salesforceRecordUrl, "_blank")
+                } else {
+                  handleAddToSalesforce()
+                }
+              }}
               disabled={salesforceStatus === "loading"}
               className={`
     text-[14px]
@@ -488,7 +499,7 @@ export function TenderCard(props: TenderCardProps) {
                 {salesforceStatus === "loading"
                   ? "Adding..."
                   : salesforceStatus === "success"
-                    ? "Added!"
+                    ? salesforceRecordUrl ? "View in SF ↗" : "Added!"
                     : salesforceStatus === "error"
                       ? "Failed"
                       : "Add to Salesforce"}
