@@ -1,8 +1,21 @@
 "use client"
 
 import * as React from "react"
-import { fetchFullyPassedTenders, fetchTenderWins, type FullyPassedTender, type EvaluationResult } from "@/lib/api"
+import useSWR from "swr"
+import {
+    fetcher,
+    getFullyPassedTendersUrl,
+    getTenderWinsUrl,
+    getTendersUrl,
+    getFailedEvaluationsUrl,
+    type FullyPassedTender,
+    type EvaluationResult,
+    type FailedEvaluationStep,
+    type PaginatedResponse,
+    type RawTender
+} from "@/lib/api"
 import type { TenderData } from "@/data/tenders"
+
 function mapFullyPassedToTenderData(tender: FullyPassedTender): TenderData {
     // Derive days left from bid_submission_end
     let daysLeft = 0
@@ -164,64 +177,170 @@ function mapEvalResultToTenderData(result: EvaluationResult): TenderData {
         contractValue: 0,
     }
 }
-export function useTenderDiscovery() {
-    const [data, setData] = React.useState<TenderData[]>([])
-    const [loading, setLoading] = React.useState(true)
-    const [error, setError] = React.useState<string | null>(null)
 
-    React.useEffect(() => {
-        let cancelled = false
-        setLoading(true)
-        setError(null)
+function mapRawTenderToTenderData(tender: RawTender): TenderData {
+    let daysLeft = 0
+    let deadline = "—"
+    if (tender.bid_submission_end) {
+        const end = new Date(tender.bid_submission_end)
+        const now = new Date()
+        daysLeft = Math.max(0, Math.floor((end.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)))
+        deadline = end.toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+    }
 
-        fetchFullyPassedTenders()
-            .then((res) => {
-                if (!cancelled) {
-                    setData(res.results.map(mapFullyPassedToTenderData))
-                }
-            })
-            .catch((err: Error) => {
-                if (!cancelled) {
-                    setError(err.message)
-                }
-            })
-            .finally(() => {
-                if (!cancelled) setLoading(false)
-            })
+    let totalValue = "—"
+    let totalValueAmount = 0
+    if (tender.tender_value) {
+        const val = parseFloat(tender.tender_value)
+        totalValueAmount = val
+        if (val >= 10000000) {
+            totalValue = `₹${(val / 10000000).toFixed(2)} Cr`
+        } else if (val >= 100000) {
+            totalValue = `₹${(val / 100000).toFixed(2)} L`
+        } else {
+            totalValue = `₹${val.toLocaleString("en-IN")}`
+        }
+    }
 
-        return () => { cancelled = true }
-    }, [])
+    const locationParts: string[] = []
+    if (tender.city && tender.city.length) locationParts.push(tender.city[0])
+    if (tender.state && tender.state.length) locationParts.push(tender.state[0])
+    const location = locationParts.join(", ") || tender.location || "India"
 
-    return { data, loading, error }
+    const requirements = [{
+        category: tender.tender_category || "General",
+        detail: tender.title?.slice(0, 100) || "No title"
+    }]
+
+    return {
+        id: tender.tender_id || tender.source_tender_id,
+        winningCompany: tender.organisation || "Unknown Organisation",
+        location,
+        date: tender.publish_date
+            ? new Date(tender.publish_date).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+            : "",
+        status: tender.status === "active" ? "Open Bidding" : (tender.status || "Unknown"),
+        title: tender.title || "Untitled Tender",
+        requirements,
+        leadScore: 50,
+        leadProbability: "Pending AI Evaluation",
+        totalValue,
+        totalValueAmount,
+        valueSource: "Raw Source Data",
+        deadline,
+        daysLeft,
+        nearestSupply: "—",
+        logisticsDetail: "",
+        sourcePortal: tender.portal_name || "TenderKart",
+        quote: "Tender imported. Pending deep AI evaluation.",
+        aiAction: "Evaluate Tender",
+        contractValue: totalValueAmount,
+    }
 }
 
-export function useTenderWins() {
-    const [data, setData] = React.useState<TenderData[]>([])
-    const [loading, setLoading] = React.useState(true)
-    const [error, setError] = React.useState<string | null>(null)
+function mapFailedEvalToTenderData(failed: FailedEvaluationStep): TenderData {
+    return {
+        id: failed.tender_id || failed.source_tender_id,
+        winningCompany: failed.tender_organisation || "Unknown Result",
+        location: "India",
+        date: failed.updated_at
+            ? new Date(failed.updated_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })
+            : "",
+        status: "Evaluation Failed",
+        title: failed.tender_title || failed.tender_reference_number || "Evaluation Failure",
+        requirements: [{
+            category: `Failed Step ${failed.failed_step_number}: ${failed.failed_step_name}`,
+            detail: failed.decision_reason || failed.error_message || "Unknown error occurred"
+        }],
+        leadScore: 0,
+        leadProbability: "Rejected/Failed",
+        totalValue: "—",
+        totalValueAmount: 0,
+        valueSource: "N/A",
+        deadline: "—",
+        daysLeft: 0,
+        nearestSupply: "—",
+        logisticsDetail: "",
+        sourcePortal: "TenderKart",
+        quote: `Failed during ${failed.failed_step_name}. Reason: ${failed.error_message || failed.decision_reason}`,
+        aiAction: "View Failure Reason",
+        contractValue: 0,
+    }
+}
 
-    React.useEffect(() => {
-        let cancelled = false
-        setLoading(true)
-        setError(null)
+export function useTenderDiscovery(page = 1) {
+    const { data: rawData, error, isLoading } = useSWR<{ results: FullyPassedTender[], count: number }>(
+        `${getFullyPassedTendersUrl()}?page=${page}`,
+        fetcher,
+        { keepPreviousData: true }
+    )
 
-        fetchTenderWins()
-            .then((res) => {
-                if (!cancelled) {
-                    setData(res.results.map(mapEvalResultToTenderData))
-                }
-            })
-            .catch((err: Error) => {
-                if (!cancelled) {
-                    setError(err.message)
-                }
-            })
-            .finally(() => {
-                if (!cancelled) setLoading(false)
-            })
+    const data = React.useMemo(() => {
+        if (!rawData?.results) return []
+        return rawData.results.map(mapFullyPassedToTenderData)
+    }, [rawData])
 
-        return () => { cancelled = true }
-    }, [])
+    return {
+        data,
+        loading: isLoading,
+        error: error?.message || null,
+        totalPages: rawData?.count ? Math.ceil(rawData.count / 10) : 1
+    }
+}
 
-    return { data, loading, error }
+export function useTenderWins(page = 1) {
+    const { data: rawData, error, isLoading } = useSWR<PaginatedResponse<EvaluationResult>>(
+        getTenderWinsUrl(page),
+        fetcher,
+        { keepPreviousData: true }
+    )
+
+    const data = React.useMemo(() => {
+        return rawData?.results ? rawData.results.map(mapEvalResultToTenderData) : []
+    }, [rawData])
+
+    return {
+        data,
+        loading: isLoading,
+        error: error?.message || null,
+        totalPages: rawData?.count ? Math.ceil(rawData.count / 10) : 1 // Assuming default page_size is 10
+    }
+}
+
+export function useAllTenders(page = 1) {
+    const { data: rawData, error, isLoading } = useSWR<PaginatedResponse<RawTender>>(
+        getTendersUrl(page),
+        fetcher,
+        { keepPreviousData: true }
+    )
+
+    const data = React.useMemo(() => {
+        return rawData?.results ? rawData.results.map(mapRawTenderToTenderData) : []
+    }, [rawData])
+
+    return {
+        data,
+        loading: isLoading,
+        error: error?.message || null,
+        totalPages: rawData?.count ? Math.ceil(rawData.count / 10) : 1
+    }
+}
+
+export function useFailedEvaluations(page = 1) {
+    const { data: rawData, error, isLoading } = useSWR<PaginatedResponse<FailedEvaluationStep>>(
+        getFailedEvaluationsUrl(page),
+        fetcher,
+        { keepPreviousData: true }
+    )
+
+    const data = React.useMemo(() => {
+        return rawData?.results ? rawData.results.map(mapFailedEvalToTenderData) : []
+    }, [rawData])
+
+    return {
+        data,
+        loading: isLoading,
+        error: error?.message || null,
+        totalPages: rawData?.count ? Math.ceil(rawData.count / 10) : 1
+    }
 }

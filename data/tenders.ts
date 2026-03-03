@@ -34,6 +34,7 @@ export interface TenderData {
 }
 
 export interface PrivateNewsData {
+  id?: string
   // Card identity
   winningCompany: string        // Company / Developer name
   location: string

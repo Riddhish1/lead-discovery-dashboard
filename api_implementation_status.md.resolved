@@ -1,0 +1,44 @@
+# API Implementation Status Report
+
+Based on the [postman.json](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/postman.json) collection for your backend and the Next.js [lib/api.ts](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts) file, here is a complete breakdown of what is currently integrated into the frontend versus what is available but pending integration.
+
+## ✅ Implemented Endpoints ([lib/api.ts](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts))
+These endpoints are fully typed and wired up with native [fetch](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts#139-156) wrappers for the UI to consume:
+
+**Tenders**
+- `GET /tenders/` (implemented via [fetchTenders](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts#139-156)) – Used to list paginated tenders with status/search parameters.
+
+**4-Step AI Evaluations**
+- `GET /evaluations/fully_passed/` (implemented via [fetchFullyPassedTenders](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts#99-110)) – Populates the primary "**Tender Discovery**" tab.
+- `GET /evaluations/failed/` (implemented via [fetchFailedEvaluations](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts#123-138)) – Can fetch failed pipeline records by tender or source ID.
+- `GET /evaluations/` (implemented via [fetchEvaluationSteps](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts#157-164)) – Fetches all 4 steps metrics for a specific tender UUID.
+
+**2-Step AI Evaluation Results**
+- `GET /evaluation-results/` (implemented via [fetchTenderWins](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts#110-122) & [fetchEvaluationResult](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts#165-172)) – Populates the "**Tender Wins**" tab fetching recommended leads.
+
+<hr>
+
+## ⏳ Pending / Unimplemented Endpoints
+These endpoints exist and work on your backend, but have not yet been added to [lib/api.ts](file:///c:/Users/Riddhish/Desktop/lead-discovery-dashboard/lib/api.ts) or wired into a UI component. 
+
+### 📋 Tenders Module
+- **`GET /tenders/{tender_uuid}/`** – Get full, deep details (extended_data, boq_data) for a single tender. *(Useful for a tender detail page/modal).*
+- **`GET /tenders/upcoming/`** – Fetch tenders closing within X days.
+- **`GET /tenders/statistics/`** – Fetch aggregate total counts by status and category.
+
+### 🤖 4-Step Evaluations (Discovery)
+- **`GET /evaluations/step{1|2|3|4}.../`** – Specialized endpoints to fetch the raw AI JSON responses for the individual 4 evaluation steps.
+- **`GET /evaluations/summary/`** – Aggregate evaluation statistics.
+- **`POST /evaluations/trigger/`** – Manually trigger a new 4-step AI evaluation for a given tender UUID. *(Could be wired to a UI button).*
+
+### 🏆 2-Step Evaluation Results (Wins)
+- **`GET /evaluation-results/{tender_uuid}/`** – Fetch 2-step evaluation data for a single tender.
+- **`GET /evaluation-results/{tender_uuid}/step{1|2}_response/`** – Fetch raw step data.
+- **`GET /evaluation-results/summary/`** – Aggregate statistics for the 2-step evaluation pipeline.
+- **`POST /evaluation-results/trigger/`** – Manually trigger the 2-step pipeline. *(Could be wired to a UI button).*
+
+### ⚙️ System & Scraping Engine
+- **`GET /health/`** – Real-time system, DB, and tender count health check.
+- **`GET /configurations/`** – View active TenderKart scraper configurations.
+- **`POST /trigger-scrape/`** – Manually trigger the Python scraper jobs on-demand.
+- **`GET /jobs/`** & **`GET /jobs/summary/`** – Dashboard views to track recent scraping job statuses and completion metrics.

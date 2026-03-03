@@ -28,6 +28,7 @@ import { AIReasoningDialog } from './ai-reasoning-dialog';
 import { PrivateNewsRightPanel } from './private-news-right-panel';
 import { TenderDiscoveryRightPanel } from './tender-discovery-right-panel';
 import { getDefaultReasoningSteps, type ReasoningStep } from '@/data/reasoning-steps';
+import { TenderDetailsModal } from './tender-details-modal';
 
 
 interface TenderRequirement {
@@ -36,6 +37,7 @@ interface TenderRequirement {
 }
 
 interface TenderCardProps {
+  id?: string
   cardVariant?: "tender-discovery" | "tender-wins" | "private-news"
   winningCompany: string
   location: string
@@ -73,6 +75,7 @@ interface TenderCardProps {
 
 export function TenderCard(props: TenderCardProps) {
   const [dialogOpen, setDialogOpen] = React.useState(false)
+  const [detailsOpen, setDetailsOpen] = React.useState(false)
   const [salesforceStatus, setSalesforceStatus] = React.useState<"idle" | "loading" | "success" | "error">("idle")
   const [salesforceRecordUrl, setSalesforceRecordUrl] = React.useState<string | null>(null)
 
@@ -533,6 +536,13 @@ export function TenderCard(props: TenderCardProps) {
 
             <Button
               variant="ghost"
+              onClick={() => {
+                if (props.id) {
+                  setDetailsOpen(true)
+                } else {
+                  console.log("No tender ID available for details")
+                }
+              }}
               className="
     text-[14px]
     leading-[20px]
@@ -616,8 +626,57 @@ export function TenderCard(props: TenderCardProps) {
         reasoningSteps={steps}
       />
 
+      {props.id && (
+        <TenderDetailsModal
+          tenderId={props.id}
+          open={detailsOpen}
+          onOpenChange={setDetailsOpen}
+          tenderTitle={title}
+        />
+      )}
+
     </Card>
 
   )
 
+}
+
+export function TenderCardSkeleton() {
+  return (
+    <Card className="flex flex-col xl:flex-row shadow-sm border overflow-hidden p-6 animate-pulse">
+      <div className="flex-1 xl:border-r pr-0 xl:pr-6 mb-6 xl:mb-0 space-y-4">
+        {/* Header Skeleton */}
+        <div className="flex items-start justify-between">
+          <div className="flex items-start gap-4 flex-1">
+            <div className="h-12 w-12 rounded bg-gray-200" />
+            <div className="space-y-2 flex-1 pt-1">
+              <div className="h-5 bg-gray-200 rounded w-1/3" />
+              <div className="h-4 bg-gray-200 rounded w-1/4" />
+            </div>
+          </div>
+          <div className="h-6 w-24 bg-gray-200 rounded-full" />
+        </div>
+
+        {/* Title Skeleton */}
+        <div className="pt-2 pb-1 space-y-2">
+          <div className="h-6 bg-gray-200 rounded w-3/4" />
+          <div className="h-4 bg-gray-200 rounded w-1/4" />
+        </div>
+
+        {/* Content Skeleton */}
+        <div className="space-y-3 pt-2">
+          <div className="h-4 bg-gray-200 rounded w-full" />
+          <div className="h-4 bg-gray-200 rounded w-5/6" />
+          <div className="h-4 bg-gray-200 rounded w-4/6" />
+        </div>
+      </div>
+
+      {/* Right side skeleton */}
+      <div className="w-full xl:w-80 shrink-0 pl-0 xl:pl-6 flex flex-col justify-center items-center py-4 bg-gray-50/50 rounded-lg ml-0 xl:ml-2">
+        <div className="h-24 w-24 rounded-full bg-gray-200 mb-4" />
+        <div className="h-6 bg-gray-200 rounded w-32 mb-2" />
+        <div className="h-4 bg-gray-200 rounded w-24" />
+      </div>
+    </Card>
+  )
 }

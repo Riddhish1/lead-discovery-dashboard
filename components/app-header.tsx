@@ -33,46 +33,62 @@ export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
   }
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-white">
-      <div className="flex h-16 items-center px-6">
+      <div className="flex h-16 items-center px-6 gap-6 w-full">
         {/* Logo */}
-        <div className="flex items-center mr-45">
-          <img 
-            src="/logo.png" 
-            alt="JSW Logo" 
+        <div className="flex shrink-0 items-center">
+          <img
+            src="/logo.png"
+            alt="JSW Logo"
             className="h-10 w-auto"
           />
         </div>
 
         {/* Navigation Tabs */}
-        <Tabs value={activeTab} onValueChange={onTabChange} className="flex">
-          <TabsList className="bg-[#F1F5F9] rounded-full p-1 ml-6 shadow-sm" variant="default">
-            <TabsTrigger
-              value="tender-discovery"
-              className="text-sm font-semibold px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE]"
-            >
-              Tender Discovery
-            </TabsTrigger>
+        <div className="flex-1 overflow-x-auto custom-scrollbar no-scrollbar">
+          <Tabs value={activeTab} onValueChange={onTabChange} className="flex w-max">
+            <TabsList className="bg-[#F1F5F9] rounded-full p-1 shadow-sm" variant="default">
+              <TabsTrigger
+                value="tender-discovery"
+                className="text-sm font-semibold px-4 lg:px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE] whitespace-nowrap"
+              >
+                Tender Discovery
+              </TabsTrigger>
 
-            <TabsTrigger
-              value="tender-wins"
-              className="text-sm font-semibold px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE]"
-            >
-              Tender Wins
-            </TabsTrigger>
+              <TabsTrigger
+                value="tender-wins"
+                className="text-sm font-semibold px-4 lg:px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE] whitespace-nowrap"
+              >
+                Tender Wins
+              </TabsTrigger>
 
-            <TabsTrigger
-              value="private-news"
-              className="text-sm font-semibold px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE]"
-            >
-              Private News
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+              <TabsTrigger
+                value="private-news"
+                className="text-sm font-semibold px-4 lg:px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE] whitespace-nowrap"
+              >
+                Private News
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="all-tenders"
+                className="text-sm font-semibold px-4 lg:px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-[#155DFC] data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-[#DBEAFE] whitespace-nowrap"
+              >
+                All Tenders
+              </TabsTrigger>
+
+              <TabsTrigger
+                value="failed-evaluations"
+                className="text-sm font-semibold px-4 lg:px-5 py-2 rounded-full text-[#62748E] hover:text-[#0F172B] transition-colors data-[state=active]:bg-red-500 data-[state=active]:text-white data-[state=active]:shadow-md data-[state=active]:ring-1 data-[state=active]:ring-red-200 whitespace-nowrap"
+              >
+                Failed Evaluations
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+        </div>
 
         {/* Right Section */}
-        <div className="flex items-center gap-3 ml-auto">
+        <div className="flex items-center gap-3 ml-auto shrink-0">
           {/* Search Bar */}
-          <div className="relative w-72">
+          <div className="relative hidden xl:block w-72">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               type="search"
@@ -81,7 +97,7 @@ export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
             />
           </div>
 
-          
+
 
           {/* Notifications */}
           <DropdownMenu>

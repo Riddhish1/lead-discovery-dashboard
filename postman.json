@@ -1,0 +1,740 @@
+{
+    "info": {
+        "name": "Lead Discovery API",
+        "description": "Complete API collection for the Lead Discovery backend. Base URL: http://localhost:8000/api/v1",
+        "_postman_id": "lead-discovery-v2-api",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api/v1",
+            "type": "string"
+        },
+        {
+            "key": "tender_uuid",
+            "value": "PASTE-TENDER-UUID-HERE",
+            "type": "string"
+        },
+        {
+            "key": "source_tender_id",
+            "value": "PASTE-SOURCE-TENDER-ID-HERE",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "📋 Tenders",
+            "item": [
+                {
+                    "name": "List All Tenders",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/tenders/?status=active&page=1&page_size=20",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "tenders",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "active",
+                                    "description": "Filter: active | financial_evaluation | aoc"
+                                },
+                                {
+                                    "key": "page",
+                                    "value": "1"
+                                },
+                                {
+                                    "key": "page_size",
+                                    "value": "20",
+                                    "description": "Max 100"
+                                },
+                                {
+                                    "key": "search",
+                                    "value": "",
+                                    "disabled": true,
+                                    "description": "Search in title, org, ref number"
+                                },
+                                {
+                                    "key": "organisation",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "category",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "published_after",
+                                    "value": "",
+                                    "disabled": true,
+                                    "description": "ISO date e.g. 2026-01-01"
+                                },
+                                {
+                                    "key": "published_before",
+                                    "value": "",
+                                    "disabled": true
+                                }
+                            ]
+                        },
+                        "description": "List paginated tenders with optional filters."
+                    }
+                },
+                {
+                    "name": "Get Tender by UUID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/tenders/{{tender_uuid}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "tenders",
+                                "{{tender_uuid}}",
+                                ""
+                            ]
+                        },
+                        "description": "Get full tender detail including extended_data, boq_data, raw_data."
+                    }
+                },
+                {
+                    "name": "Get Tender by Source ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/tenders/?source_tender_id={{source_tender_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "tenders",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "source_tender_id",
+                                    "value": "{{source_tender_id}}",
+                                    "description": "Original TenderKart ID"
+                                }
+                            ]
+                        },
+                        "description": "Lookup a tender by its original TenderKart source ID."
+                    }
+                },
+                {
+                    "name": "Upcoming Tenders (deadline soon)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/tenders/upcoming/?days=7",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "tenders",
+                                "upcoming",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "7",
+                                    "description": "Tenders closing within N days"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Tender Statistics",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/tenders/statistics/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "tenders",
+                                "statistics",
+                                ""
+                            ]
+                        },
+                        "description": "Total counts by status and category."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🤖 4-Step Evaluations (Discovery Tab)",
+            "item": [
+                {
+                    "name": "✅ Fully Passed Tenders (Dashboard — Discovery Tab)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/fully_passed/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "fully_passed",
+                                ""
+                            ]
+                        },
+                        "description": "Returns tenders where ALL 4 steps are completed AND decision=yes on step 1.\n\nThis is the PRIMARY data source for the Tender Discovery tab in the frontend dashboard.\n\nReturns: tender info + evaluation_steps (step_1..step_4) summaries."
+                    }
+                },
+                {
+                    "name": "❌ Failed Evaluations",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/failed/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "failed",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "tender",
+                                    "value": "",
+                                    "disabled": true,
+                                    "description": "Filter by tender UUID"
+                                },
+                                {
+                                    "key": "source_tender_id",
+                                    "value": "",
+                                    "disabled": true,
+                                    "description": "Filter by TenderKart ID"
+                                },
+                                {
+                                    "key": "step_number",
+                                    "value": "",
+                                    "disabled": true,
+                                    "description": "Filter by step number (1-4)"
+                                }
+                            ]
+                        },
+                        "description": "Returns tenders where any evaluation step has decision=no or status=failed.\n\nUse query params to filter by tender ID or specific step."
+                    }
+                },
+                {
+                    "name": "Failed Evaluations for Specific Tender",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/failed/?tender={{tender_uuid}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "failed",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "tender",
+                                    "value": "{{tender_uuid}}"
+                                }
+                            ]
+                        },
+                        "description": "Get failed evaluation steps for a specific tender by UUID."
+                    }
+                },
+                {
+                    "name": "Failed by Source Tender ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/failed/?source_tender_id={{source_tender_id}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "failed",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "source_tender_id",
+                                    "value": "{{source_tender_id}}"
+                                }
+                            ]
+                        },
+                        "description": "Get failed evaluation steps using the original TenderKart ID."
+                    }
+                },
+                {
+                    "name": "List All Evaluation Steps",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/?tender={{tender_uuid}}",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "tender",
+                                    "value": "{{tender_uuid}}",
+                                    "description": "Filter by tender UUID"
+                                },
+                                {
+                                    "key": "decision",
+                                    "value": "",
+                                    "disabled": true,
+                                    "description": "yes | no | pending | na"
+                                },
+                                {
+                                    "key": "step_type",
+                                    "value": "",
+                                    "disabled": true
+                                },
+                                {
+                                    "key": "step_number",
+                                    "value": "",
+                                    "disabled": true
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Step 1 — Product Match (All)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/step1_product_match/?raw=true",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "step1_product_match",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "raw",
+                                    "value": "true",
+                                    "description": "true = raw response only"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Step 2 — Pricing Analysis (All)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/step2_pricing_analysis/?raw=false",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "step2_pricing_analysis",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "raw",
+                                    "value": "false"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Step 3 — Competitor Check (All)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/step3_competitor_check/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "step3_competitor_check",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Step 4 — Legal Review (All)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/step4_legal_review/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "step4_legal_review",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Evaluation Summary (Stats)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/summary/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "summary",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Trigger 4-Step Evaluation",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"tender_id\": \"{{tender_uuid}}\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/evaluations/trigger/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluations",
+                                "trigger",
+                                ""
+                            ]
+                        },
+                        "description": "Trigger the full 4-step evaluation pipeline for a tender. Use tender_id (UUID) OR source_tender_id."
+                    }
+                }
+            ]
+        },
+        {
+            "name": "🏆 2-Step Evaluation Results (Tender Wins Tab)",
+            "item": [
+                {
+                    "name": "✅ Tender Wins (Dashboard — Wins Tab)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluation-results/?status=completed&decision=recommended",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluation-results",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "completed"
+                                },
+                                {
+                                    "key": "decision",
+                                    "value": "recommended"
+                                }
+                            ]
+                        },
+                        "description": "Returns tenders where both 2-step evaluation steps are completed and final_decision=recommended.\n\nThis is the PRIMARY data source for the Tender Wins tab in the dashboard."
+                    }
+                },
+                {
+                    "name": "List All Evaluation Results",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluation-results/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluation-results",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "",
+                                    "disabled": true,
+                                    "description": "pending | step1_completed | completed | failed"
+                                },
+                                {
+                                    "key": "decision",
+                                    "value": "",
+                                    "disabled": true,
+                                    "description": "recommended | not_recommended | review_required | pending"
+                                },
+                                {
+                                    "key": "tender",
+                                    "value": "",
+                                    "disabled": true
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Evaluation Result by ID",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluation-results/{{tender_uuid}}/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluation-results",
+                                "{{tender_uuid}}",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Step 1 Response Only",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluation-results/{{tender_uuid}}/step1_response/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluation-results",
+                                "{{tender_uuid}}",
+                                "step1_response",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Step 2 Response Only",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluation-results/{{tender_uuid}}/step2_response/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluation-results",
+                                "{{tender_uuid}}",
+                                "step2_response",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Trigger 2-Step Evaluation",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"tender_id\": \"{{tender_uuid}}\"\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/evaluation-results/trigger/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluation-results",
+                                "trigger",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Evaluation Results Summary (Stats)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/evaluation-results/summary/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "evaluation-results",
+                                "summary",
+                                ""
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "⚙️ System",
+            "item": [
+                {
+                    "name": "Health Check",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/health/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "health",
+                                ""
+                            ]
+                        },
+                        "description": "Check server health, DB connectivity, and tenders count."
+                    }
+                },
+                {
+                    "name": "List Scraping Configs",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/configurations/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "configurations",
+                                ""
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Trigger Scrape",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/trigger-scrape/",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "trigger-scrape",
+                                ""
+                            ]
+                        },
+                        "description": "Trigger a new scraping job using the active configuration."
+                    }
+                },
+                {
+                    "name": "List Scraping Jobs",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/jobs/?status=completed",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "jobs",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "status",
+                                    "value": "completed",
+                                    "description": "pending | started | in_progress | completed | failed"
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Jobs Summary (7 days)",
+                    "request": {
+                        "method": "GET",
+                        "url": {
+                            "raw": "{{base_url}}/jobs/summary/?days=7",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "jobs",
+                                "summary",
+                                ""
+                            ],
+                            "query": [
+                                {
+                                    "key": "days",
+                                    "value": "7"
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}
