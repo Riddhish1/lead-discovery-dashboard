@@ -149,7 +149,7 @@ function mapEvalResultToTenderData(result: EvaluationResult): TenderData {
     const estValue = (overview.estimated_value as string) || "—"
     const leadScore = result.step1_confidence_level === "high" ? 88 : result.step1_confidence_level === "medium" ? 72 : 60
     const leadProbability =
-        result.final_decision === "recommended" ? "Very High" :
+        result.final_decision === 'bid' ? "Very High" :
             result.final_decision === "review_required" ? "Review Needed" : "Moderate"
 
     return {
@@ -268,11 +268,11 @@ function mapFailedEvalToTenderData(failed: FailedEvaluationStep): TenderData {
     }
 }
 
-export function useTenderDiscovery(page = 1) {
+export function useTenderDiscovery(page = 1, search = "") {
     const { data: rawData, error, isLoading } = useSWR<{ results: FullyPassedTender[], count: number }>(
-        `${getFullyPassedTendersUrl()}?page=${page}`,
+        getFullyPassedTendersUrl(page, search),
         fetcher,
-        { keepPreviousData: true }
+        { keepPreviousData: true, refreshInterval: 30000 }
     )
 
     const data = React.useMemo(() => {
@@ -288,9 +288,9 @@ export function useTenderDiscovery(page = 1) {
     }
 }
 
-export function useTenderWins(page = 1) {
+export function useTenderWins(page = 1, search = "") {
     const { data: rawData, error, isLoading } = useSWR<PaginatedResponse<EvaluationResult>>(
-        getTenderWinsUrl(page),
+        getTenderWinsUrl(page, search),
         fetcher,
         { keepPreviousData: true }
     )
@@ -307,9 +307,9 @@ export function useTenderWins(page = 1) {
     }
 }
 
-export function useAllTenders(page = 1) {
+export function useAllTenders(page = 1, search = "") {
     const { data: rawData, error, isLoading } = useSWR<PaginatedResponse<RawTender>>(
-        getTendersUrl(page),
+        getTendersUrl(page, search),
         fetcher,
         { keepPreviousData: true }
     )
@@ -326,11 +326,11 @@ export function useAllTenders(page = 1) {
     }
 }
 
-export function useFailedEvaluations(page = 1) {
+export function useFailedEvaluations(page = 1, search = "") {
     const { data: rawData, error, isLoading } = useSWR<PaginatedResponse<FailedEvaluationStep>>(
-        getFailedEvaluationsUrl(page),
+        getFailedEvaluationsUrl(page, search),
         fetcher,
-        { keepPreviousData: true }
+        { keepPreviousData: true, refreshInterval: 30000 }
     )
 
     const data = React.useMemo(() => {

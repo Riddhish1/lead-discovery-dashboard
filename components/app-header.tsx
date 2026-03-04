@@ -21,9 +21,11 @@ import { logout, getUserEmail } from "@/lib/auth"
 interface AppHeaderProps {
   activeTab: string
   onTabChange: (tab: string) => void
+  searchQuery?: string
+  onSearchChange?: (q: string) => void
 }
 
-export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
+export function AppHeader({ activeTab, onTabChange, searchQuery = "", onSearchChange }: AppHeaderProps) {
   const router = useRouter()
   const userEmail = getUserEmail()
 
@@ -88,12 +90,14 @@ export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
         {/* Right Section */}
         <div className="flex items-center gap-3 ml-auto shrink-0">
           {/* Search Bar */}
-          <div className="relative hidden xl:block w-72">
+          <div className="relative hidden lg:block w-56 xl:w-72">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               type="search"
-              placeholder="SEARCH"
-              className="w-full pl-9 bg-gray-50 border-gray-200 placeholder:text-gray-500 placeholder:text-xs placeholder:font-medium h-9"
+              placeholder="Search tenders…"
+              value={searchQuery}
+              onChange={e => onSearchChange?.(e.target.value)}
+              className="w-full pl-9 bg-gray-50 border-gray-200 placeholder:text-gray-400 placeholder:text-xs placeholder:font-medium h-9"
             />
           </div>
 
@@ -153,10 +157,12 @@ export function AppHeader({ activeTab, onTabChange }: AppHeaderProps) {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push('/system')} className="font-semibold text-indigo-700 cursor-pointer">
+                System Data Engine
+              </DropdownMenuItem>
               <DropdownMenuItem>Team</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600">
+              <DropdownMenuItem onClick={handleLogout} className="text-red-600 focus:text-red-600 cursor-pointer">
                 <LogOut className="mr-2 h-4 w-4" />
                 Log out
               </DropdownMenuItem>

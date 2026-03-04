@@ -632,6 +632,7 @@ export function TenderCard(props: TenderCardProps) {
           open={detailsOpen}
           onOpenChange={setDetailsOpen}
           tenderTitle={title}
+          cardVariant={cardVariant}
         />
       )}
 

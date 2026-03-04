@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
 
 const HARDCODED_EMAIL = "ramesh.sahay@jsw.in";
-const HARDCODED_PASSWORD = "Password@123";
+const HARDCODED_PASSWORD = "password";
 
 export default function LoginPage() {
   const router = useRouter();

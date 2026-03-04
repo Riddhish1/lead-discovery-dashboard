@@ -11,6 +11,7 @@ import { privateNewsTenders } from "@/data/tenders"
 import { SidebarProvider, SidebarInset, useSidebar } from "@/components/ui/sidebar"
 import { FiltersSidebar } from "@/components/filters-sidebar"
 import { useTenderDiscovery, useTenderWins, useAllTenders, useFailedEvaluations } from "@/hooks/useTenders"
+import { useDebounce } from "@/hooks/useDebounce"
 import { PaginationControls } from "@/components/pagination-controls"
 import type { TenderData } from "@/data/tenders"
 
@@ -24,9 +25,23 @@ function getFiltersForTab(tab: string): FilterSection[] {
 // ---------------------------------------------------------------------------
 // All Tenders (Raw data before evaluation)
 // ---------------------------------------------------------------------------
-function AllTendersList() {
+function AllTendersList({ searchQuery = "" }: { searchQuery?: string }) {
   const [page, setPage] = React.useState(1)
-  const { data, loading, error, totalPages } = useAllTenders(page)
+  // Reset to page 1 whenever the search query changes
+  React.useEffect(() => { setPage(1) }, [searchQuery])
+  const { data: rawData, loading, error, totalPages } = useAllTenders(page, searchQuery)
+
+  // Client-side fallback: filter the loaded page in case the backend
+  // doesn't have SearchFilter enabled on this endpoint
+  const data = React.useMemo(() => {
+    if (!searchQuery.trim()) return rawData
+    const q = searchQuery.toLowerCase()
+    return rawData.filter(t =>
+      t.title?.toLowerCase().includes(q) ||
+      t.winningCompany?.toLowerCase().includes(q) ||
+      t.location?.toLowerCase().includes(q)
+    )
+  }, [rawData, searchQuery])
 
   if (loading && data.length === 0) {
     return (
@@ -86,9 +101,20 @@ function AllTendersList() {
 // ---------------------------------------------------------------------------
 // Failed Evaluations (Tenders that failed an AI step)
 // ---------------------------------------------------------------------------
-function FailedEvaluationsList() {
+function FailedEvaluationsList({ searchQuery = "" }: { searchQuery?: string }) {
   const [page, setPage] = React.useState(1)
-  const { data, loading, error, totalPages } = useFailedEvaluations(page)
+  React.useEffect(() => { setPage(1) }, [searchQuery])
+  const { data: rawData, loading, error, totalPages } = useFailedEvaluations(page, searchQuery)
+
+  const data = React.useMemo(() => {
+    if (!searchQuery.trim()) return rawData
+    const q = searchQuery.toLowerCase()
+    return rawData.filter(t =>
+      t.title?.toLowerCase().includes(q) ||
+      t.winningCompany?.toLowerCase().includes(q) ||
+      t.location?.toLowerCase().includes(q)
+    )
+  }, [rawData, searchQuery])
 
   if (loading && data.length === 0) {
     return (
@@ -113,7 +139,7 @@ function FailedEvaluationsList() {
           <TenderCard
             key={tender.id || index}
             id={tender.id}
-            cardVariant="tender-wins"
+            cardVariant="tender-discovery"
             winningCompany={tender.winningCompany}
             location={tender.location}
             date={tender.date}
@@ -148,9 +174,20 @@ function FailedEvaluationsList() {
 // ---------------------------------------------------------------------------
 // Tender Discovery cards (all 4 steps passed)
 // ---------------------------------------------------------------------------
-function TenderDiscoveryList() {
+function TenderDiscoveryList({ searchQuery = "" }: { searchQuery?: string }) {
   const [page, setPage] = React.useState(1)
-  const { data, loading, error, totalPages } = useTenderDiscovery(page) // Pagination not yet heavily needed but ready
+  React.useEffect(() => { setPage(1) }, [searchQuery])  
+  const { data: rawData, loading, error, totalPages } = useTenderDiscovery(page, searchQuery)
+
+  const data = React.useMemo(() => {
+    if (!searchQuery.trim()) return rawData
+    const q = searchQuery.toLowerCase()
+    return rawData.filter(t =>
+      t.title?.toLowerCase().includes(q) ||
+      t.winningCompany?.toLowerCase().includes(q) ||
+      t.location?.toLowerCase().includes(q)
+    )
+  }, [rawData, searchQuery])
 
   if (loading && data.length === 0) {
     return (
@@ -211,9 +248,20 @@ function TenderDiscoveryList() {
 // ---------------------------------------------------------------------------
 // Tender Wins cards (2-step recommended)
 // ---------------------------------------------------------------------------
-function TenderWinsList() {
+function TenderWinsList({ searchQuery = "" }: { searchQuery?: string }) {
   const [page, setPage] = React.useState(1)
-  const { data, loading, error, totalPages } = useTenderWins(page)
+  React.useEffect(() => { setPage(1) }, [searchQuery])
+  const { data: rawData, loading, error, totalPages } = useTenderWins(page, searchQuery)
+
+  const data = React.useMemo(() => {
+    if (!searchQuery.trim()) return rawData
+    const q = searchQuery.toLowerCase()
+    return rawData.filter(t =>
+      t.title?.toLowerCase().includes(q) ||
+      t.winningCompany?.toLowerCase().includes(q) ||
+      t.location?.toLowerCase().includes(q)
+    )
+  }, [rawData, searchQuery])
 
   if (loading && data.length === 0) {
     return (
@@ -273,7 +321,7 @@ function TenderWinsList() {
 // ---------------------------------------------------------------------------
 // Main Dashboard Content
 // ---------------------------------------------------------------------------
-function DashboardContent({ activeTab }: { activeTab: string }) {
+function DashboardContent({ activeTab, searchQuery }: { activeTab: string; searchQuery: string }) {
   const { toggleSidebar } = useSidebar()
   const [filters, setFilters] = React.useState<FilterSection[]>(() => getFiltersForTab(activeTab))
 
@@ -335,7 +383,16 @@ function DashboardContent({ activeTab }: { activeTab: string }) {
 
         {activeTab === "private-news" ? (
           <div className="pt-6 px-8 pb-0 space-y-7">
-            {privateNewsTenders.map((item, index) => (
+            {privateNewsTenders
+              .filter(item => {
+                if (!searchQuery.trim()) return true
+                const q = searchQuery.toLowerCase()
+                return (
+                  item.title?.toLowerCase().includes(q) ||
+                  item.winningCompany?.toLowerCase().includes(q)
+                )
+              })
+              .map((item, index) => (
               <TenderCard
                 key={index}
                 id={item.id}
@@ -373,13 +430,13 @@ function DashboardContent({ activeTab }: { activeTab: string }) {
             ))}
           </div>
         ) : activeTab === "tender-wins" ? (
-          <TenderWinsList />
+          <TenderWinsList searchQuery={searchQuery} />
         ) : activeTab === "all-tenders" ? (
-          <AllTendersList />
+          <AllTendersList searchQuery={searchQuery} />
         ) : activeTab === "failed-evaluations" ? (
-          <FailedEvaluationsList />
+          <FailedEvaluationsList searchQuery={searchQuery} />
         ) : (
-          <TenderDiscoveryList />
+          <TenderDiscoveryList searchQuery={searchQuery} />
         )}
       </SidebarInset>
     </div>
@@ -391,13 +448,26 @@ function DashboardContent({ activeTab }: { activeTab: string }) {
 // ---------------------------------------------------------------------------
 export default function Home() {
   const [activeTab, setActiveTab] = React.useState("tender-discovery")
+  const [searchQuery, setSearchQuery] = React.useState("")
+  // Debounce: only fire a new API request 400ms after the user stops typing
+  const debouncedSearch = useDebounce(searchQuery, 400)
+
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab)
+    setSearchQuery("")
+  }
 
   return (
     <div className="h-screen w-full overflow-hidden flex flex-col">
-      <AppHeader activeTab={activeTab} onTabChange={setActiveTab} />
+      <AppHeader
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
       <div className="flex-1 overflow-hidden">
         <SidebarProvider className="h-full">
-          <DashboardContent activeTab={activeTab} />
+          <DashboardContent activeTab={activeTab} searchQuery={debouncedSearch} />
         </SidebarProvider>
       </div>
     </div>
