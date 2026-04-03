@@ -1,6 +1,5 @@
 import { ReasoningStep } from './reasoning-steps';
 
-const FUTURE_DATE_SHIFT_DAYS = 120
 const DAY_MS = 24 * 60 * 60 * 1000
 
 function monthIndex(month: string): number {
@@ -97,8 +96,27 @@ function formatDeadlineDate(date: Date): string {
   return `${day} ${month}, ${date.getUTCFullYear()}`
 }
 
+let publishedDateOffsetSeed = 0
+
+function getRecentPublishedDate(): string {
+  const daysAgo = 5 + (publishedDateOffsetSeed % 6)
+  publishedDateOffsetSeed += 1
+  const recentDate = addDays(new Date(), -daysAgo)
+  const month = new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    timeZone: 'UTC',
+  }).format(recentDate)
+  const day = recentDate.getUTCDate()
+  const year = recentDate.getUTCFullYear()
+  return `${month} ${day}, ${year}`
+}
+
 function recalculateDaysLeft(deadline: Date): number {
   return Math.max(0, Math.floor((deadline.getTime() - Date.now()) / DAY_MS))
+}
+
+function getWindowOffset(index: number): number {
+  return 5 + (index % 6)
 }
 
 
@@ -180,7 +198,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant (Maharashtra)",
     plantDistance: "1,350 km · Rail-Road Hub",
     sourceName: "Economic Times",
-    publishedDate: "Feb 18, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://economictimes.indiatimes.com",
     priority: "High",
     reasoningSteps: [
@@ -211,7 +229,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "65 km · Road (Panvel-JNPT Rd)",
     sourceName: "Construction World",
-    publishedDate: "Feb 15, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://constructionworld.in",
     priority: "High",
     reasoningSteps: [
@@ -248,7 +266,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "82 km · Road",
     sourceName: "Mint",
-    publishedDate: "Feb 10, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://livemint.com",
     priority: "High",
     winningCompany: "Lodha Group (Macrotech)",
@@ -309,7 +327,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "720 km · Rail (WDFC)",
     sourceName: "Financial Express",
-    publishedDate: "Feb 05, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://financialexpress.com",
     priority: "High",
     winningCompany: "Reliance New Energy Ltd.",
@@ -370,7 +388,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "510 km · Road",
     sourceName: "Business Standard",
-    publishedDate: "Jan 28, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://business-standard.com",
     priority: "High",
     winningCompany: "Phoenix Mills Ltd.",
@@ -431,7 +449,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Salem Plant",
     plantDistance: "320 km · Rail/Road",
     sourceName: "The Hindu BusinessLine",
-    publishedDate: "Jan 22, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://thehindubusinessline.com",
     priority: "High",
     winningCompany: "Mahindra Lifespaces",
@@ -492,7 +510,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Vijayanagar Plant",
     plantDistance: "440 km · Rail Route",
     sourceName: "Economic Times",
-    publishedDate: "Feb 12, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://economictimes.indiatimes.com",
     priority: "High",
     winningCompany: "Prestige Group",
@@ -553,7 +571,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Vasind/Dolvi",
     plantDistance: "145 km · Road",
     sourceName: "Construction World",
-    publishedDate: "Feb 08, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://constructionworld.in",
     priority: "High",
     winningCompany: "ESR India",
@@ -614,7 +632,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Vijayanagar Plant",
     plantDistance: "340 km · Road",
     sourceName: "The Hindu BusinessLine",
-    publishedDate: "Feb 14, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://thehindubusinessline.com",
     priority: "High",
     winningCompany: "Apollo Hospitals",
@@ -675,7 +693,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "1,150 km · Rail-Road",
     sourceName: "Mint",
-    publishedDate: "Feb 16, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://livemint.com",
     priority: "High",
     winningCompany: "Tata Power Renewable Energy",
@@ -736,7 +754,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant (Maharashtra)",
     plantDistance: "1,320 km · Rail Logistics Hub",
     sourceName: "Economic Times",
-    publishedDate: "Feb 16, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://economictimes.indiatimes.com",
     priority: "High",
     winningCompany: "Signature Global & RMZ JV",
@@ -797,7 +815,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Vijayanagar Plant",
     plantDistance: "680 km · Rail route",
     sourceName: "Business Today",
-    publishedDate: "Feb 18, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://businesstoday.in",
     priority: "High",
     winningCompany: "Adani Group / AdaniConneX",
@@ -858,7 +876,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "45 km · Road (via JNPT Road)",
     sourceName: "ScanX Trade News",
-    publishedDate: "Feb 18, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://scanx.trade",
     priority: "High",
     winningCompany: "Aurionpro Solutions",
@@ -919,7 +937,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Vijayanagar / Dolvi",
     plantDistance: "1,050 km · Multimodal",
     sourceName: "MagicBricks Infra News",
-    publishedDate: "Feb 05, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://magicbricks.com",
     priority: "High",
     winningCompany: "Adani Airports (PPP Lease)",
@@ -980,7 +998,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "590 km · Road",
     sourceName: "Fortune India",
-    publishedDate: "Feb 18, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://fortuneindia.com",
     priority: "High",
     winningCompany: "Madhya Pradesh Private Healthcare JV",
@@ -1041,7 +1059,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Vijayanagar Plant",
     plantDistance: "120 km · Road",
     sourceName: "Financial Express",
-    publishedDate: "Feb 12, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://financialexpress.com",
     priority: "High",
     winningCompany: "Hero Future Energies",
@@ -1102,7 +1120,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Vijayanagar Plant",
     plantDistance: "710 km · Rail",
     sourceName: "Construction World",
-    publishedDate: "Feb 15, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://constructionworld.in",
     priority: "High",
     winningCompany: "GMR Airports",
@@ -1163,7 +1181,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "1,180 km · Rail (WDFC)",
     sourceName: "Mint",
-    publishedDate: "Feb 18, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://livemint.com",
     priority: "High",
     winningCompany: "Tata Power Renewable (TPREL)",
@@ -1224,7 +1242,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Vijayanagar / Dolvi",
     plantDistance: "1,650 km · Rail Hub",
     sourceName: "Business Standard",
-    publishedDate: "Feb 10, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://business-standard.com",
     priority: "High",
     winningCompany: "Godrej Properties",
@@ -1285,7 +1303,7 @@ export const privateNewsTenders: PrivateNewsData[] = [
     nearestPlant: "Dolvi Plant",
     plantDistance: "725 km · Rail (WDFC)",
     sourceName: "The Hindu BusinessLine",
-    publishedDate: "Feb 17, 2026",
+    publishedDate: getRecentPublishedDate(),
     sourceArticleUrl: "https://thehindubusinessline.com",
     priority: "High",
     winningCompany: "Reliance Industries (Green Hydrogen)",
@@ -3898,27 +3916,31 @@ export const tenders: TenderData[] = [
   // Add other data here
 ]
 
-privateNewsTenders.forEach((item) => {
-  const futurePublishedDate = addDays(parseDateString(item.publishedDate), FUTURE_DATE_SHIFT_DAYS)
-  item.publishedDate = formatPrivateNewsDate(futurePublishedDate)
+const today = new Date()
+
+privateNewsTenders.forEach((item, index) => {
+  const recentPublishedDate = addDays(today, -getWindowOffset(index))
+  item.publishedDate = formatPrivateNewsDate(recentPublishedDate)
 })
 
-tenderWinsTenders.forEach((item) => {
-  const futureDate = addDays(parseDateString(item.dateISO || item.date), FUTURE_DATE_SHIFT_DAYS)
-  const futureDeadline = addDays(parseDateString(item.deadline), FUTURE_DATE_SHIFT_DAYS)
+tenderWinsTenders.forEach((item, index) => {
+  const offset = getWindowOffset(index)
+  const recentDate = addDays(today, -offset)
+  const futureDeadline = addDays(today, offset)
 
-  item.date = formatIsoDate(futureDate)
-  item.dateISO = formatIsoDate(futureDate)
+  item.date = formatIsoDate(recentDate)
+  item.dateISO = formatIsoDate(recentDate)
   item.deadline = formatDeadlineDate(futureDeadline)
   item.daysLeft = recalculateDaysLeft(futureDeadline)
 })
 
-tenders.forEach((item) => {
-  const futureDate = addDays(parseDateString(item.dateISO || item.date), FUTURE_DATE_SHIFT_DAYS)
-  const futureDeadline = addDays(parseDateString(item.deadline), FUTURE_DATE_SHIFT_DAYS)
+tenders.forEach((item, index) => {
+  const offset = getWindowOffset(index)
+  const recentDate = addDays(today, -offset)
+  const futureDeadline = addDays(today, offset)
 
-  item.date = formatDisplayDate(futureDate)
-  item.dateISO = formatIsoDate(futureDate)
+  item.date = formatDisplayDate(recentDate)
+  item.dateISO = formatIsoDate(recentDate)
   item.deadline = formatDeadlineDate(futureDeadline)
   item.daysLeft = recalculateDaysLeft(futureDeadline)
 })
