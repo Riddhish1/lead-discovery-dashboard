@@ -1,5 +1,107 @@
 import { ReasoningStep } from './reasoning-steps';
 
+const FUTURE_DATE_SHIFT_DAYS = 120
+const DAY_MS = 24 * 60 * 60 * 1000
+
+function monthIndex(month: string): number {
+  const normalized = month.trim().slice(0, 3).toLowerCase()
+  const lookup: Record<string, number> = {
+    jan: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    may: 4,
+    jun: 5,
+    jul: 6,
+    aug: 7,
+    sep: 8,
+    oct: 9,
+    nov: 10,
+    dec: 11,
+  }
+  return lookup[normalized] ?? 0
+}
+
+function ordinal(day: number): string {
+  const mod100 = day % 100
+  if (mod100 >= 11 && mod100 <= 13) return `${day}th`
+  switch (day % 10) {
+    case 1: return `${day}st`
+    case 2: return `${day}nd`
+    case 3: return `${day}rd`
+    default: return `${day}th`
+  }
+}
+
+function parseDateString(value: string): Date {
+  const isoMatch = value.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (isoMatch) {
+    const [, year, month, day] = isoMatch
+    return new Date(Date.UTC(Number(year), Number(month) - 1, Number(day), 12))
+  }
+
+  const ordinalMatch = value.match(/^(\d{1,2})(?:st|nd|rd|th)\s+([A-Za-z]+),?\s+(\d{4})$/)
+  if (ordinalMatch) {
+    const [, day, month, year] = ordinalMatch
+    return new Date(Date.UTC(Number(year), monthIndex(month), Number(day), 12))
+  }
+
+  const dayMonthMatch = value.match(/^(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})$/)
+  if (dayMonthMatch) {
+    const [, day, month, year] = dayMonthMatch
+    return new Date(Date.UTC(Number(year), monthIndex(month), Number(day), 12))
+  }
+
+  const monthDayMatch = value.match(/^([A-Za-z]+)\s+(\d{1,2}),?\s+(\d{4})$/)
+  if (monthDayMatch) {
+    const [, month, day, year] = monthDayMatch
+    return new Date(Date.UTC(Number(year), monthIndex(month), Number(day), 12))
+  }
+
+  const parsed = new Date(value)
+  return Number.isNaN(parsed.getTime()) ? new Date() : parsed
+}
+
+function addDays(date: Date, days: number): Date {
+  return new Date(date.getTime() + days * DAY_MS)
+}
+
+function formatIsoDate(date: Date): string {
+  return date.toISOString().slice(0, 10)
+}
+
+function formatDisplayDate(date: Date): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date)
+}
+
+function formatPrivateNewsDate(date: Date): string {
+  return new Intl.DateTimeFormat('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(date)
+}
+
+function formatDeadlineDate(date: Date): string {
+  const day = ordinal(date.getUTCDate())
+  const month = new Intl.DateTimeFormat('en-US', {
+    month: 'long',
+    timeZone: 'UTC',
+  }).format(date)
+  return `${day} ${month}, ${date.getUTCFullYear()}`
+}
+
+function recalculateDaysLeft(deadline: Date): number {
+  return Math.max(0, Math.floor((deadline.getTime() - Date.now()) / DAY_MS))
+}
+
+
 export interface TenderRequirement {
   category: string
   detail: string
@@ -3795,3 +3897,28 @@ export const tenders: TenderData[] = [
   },
   // Add other data here
 ]
+
+privateNewsTenders.forEach((item) => {
+  const futurePublishedDate = addDays(parseDateString(item.publishedDate), FUTURE_DATE_SHIFT_DAYS)
+  item.publishedDate = formatPrivateNewsDate(futurePublishedDate)
+})
+
+tenderWinsTenders.forEach((item) => {
+  const futureDate = addDays(parseDateString(item.dateISO || item.date), FUTURE_DATE_SHIFT_DAYS)
+  const futureDeadline = addDays(parseDateString(item.deadline), FUTURE_DATE_SHIFT_DAYS)
+
+  item.date = formatIsoDate(futureDate)
+  item.dateISO = formatIsoDate(futureDate)
+  item.deadline = formatDeadlineDate(futureDeadline)
+  item.daysLeft = recalculateDaysLeft(futureDeadline)
+})
+
+tenders.forEach((item) => {
+  const futureDate = addDays(parseDateString(item.dateISO || item.date), FUTURE_DATE_SHIFT_DAYS)
+  const futureDeadline = addDays(parseDateString(item.deadline), FUTURE_DATE_SHIFT_DAYS)
+
+  item.date = formatDisplayDate(futureDate)
+  item.dateISO = formatIsoDate(futureDate)
+  item.deadline = formatDeadlineDate(futureDeadline)
+  item.daysLeft = recalculateDaysLeft(futureDeadline)
+})
